@@ -12,7 +12,10 @@ export class AuthService {
       delete user.hash;
       return user;
     } else {
-      throw new HttpException('Not authed', HttpStatus.FORBIDDEN);
+      throw new HttpException(
+        'Email or password is incorrect',
+        HttpStatus.FORBIDDEN,
+      );
     }
   }
 }
