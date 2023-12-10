@@ -20,22 +20,19 @@ export class AuthService {
         delete user.email;
         delete user.hash;
         if (isSamePassword) return user;
-        else
-          throw new HttpException(
-            'Email or password is incorrect',
-            HttpStatus.FORBIDDEN,
-          );
+        else this.incorrectData();
       } else {
-        throw new HttpException(
-          'Email or password is incorrect',
-          HttpStatus.FORBIDDEN,
-        );
+        this.incorrectData();
       }
     } catch (error) {
-      throw new HttpException(
-        'Email or password is incorrect',
-        HttpStatus.FORBIDDEN,
-      );
+      this.incorrectData();
     }
+  }
+
+  incorrectData() {
+    throw new HttpException(
+      'Email or password is incorrect',
+      HttpStatus.FORBIDDEN,
+    );
   }
 }
