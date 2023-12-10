@@ -1,10 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { HashService } from 'src/hash/hash.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly hash: HashService,
+  ) {}
 
   async getUserByEmail(email: string) {
     try {
@@ -37,11 +41,27 @@ export class UserService {
 
   async createUser(userData: Prisma.UserCreateInput) {
     try {
-      const user = await this.prisma.user.create({ data: userData });
+      const password = await this.hash.hashPassword(userData.hash);
+      console.log(password);
+      const user = await this.prisma.user.create({
+        data: { ...userData, hash: password },
+      });
       return user;
     } catch (error) {
-      console.log(error);
-      throw new HttpException(error, 400);
+      this.handleCreateUserError(error);
+    }
+  }
+
+  handleCreateUserError(error: any) {
+    if (
+      error &&
+      error.code === 'P2002' &&
+      error.meta?.target?.includes('email')
+    ) {
+      throw new HttpException('Email already exists', HttpStatus.CONFLICT);
+    } else {
+      // Default error handling
+      throw new HttpException('Error occurred', HttpStatus.BAD_REQUEST);
     }
   }
 }
