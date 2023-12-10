@@ -42,7 +42,6 @@ export class UserService {
   async createUser(userData: Prisma.UserCreateInput) {
     try {
       const password = await this.hash.hashPassword(userData.hash);
-      console.log(password);
       const user = await this.prisma.user.create({
         data: { ...userData, hash: password },
       });
