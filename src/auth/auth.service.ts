@@ -12,24 +12,27 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     try {
       const user = await this.userService.getUserByEmail(email);
-      if (user) {
-        const isSamePassword = await this.hashService.comparePasswords(
-          password,
-          user.hash,
-        );
-        delete user.email;
-        delete user.hash;
-        if (isSamePassword) return user;
-        else this.incorrectData();
-      } else {
+      if (!user || !(await this.isValidPassword(password, user.hash))) {
         this.incorrectData();
       }
+
+      // If the user is valid, remove sensitive data and return
+      delete user.email;
+      delete user.hash;
+      return user;
     } catch (error) {
       this.incorrectData();
     }
   }
 
-  incorrectData() {
+  private async isValidPassword(
+    plainTextPassword: string,
+    hash: string,
+  ): Promise<boolean> {
+    return this.hashService.comparePasswords(plainTextPassword, hash);
+  }
+
+  private incorrectData() {
     throw new HttpException(
       'Email or password is incorrect',
       HttpStatus.FORBIDDEN,
