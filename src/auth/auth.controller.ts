@@ -4,10 +4,12 @@ import {
   Get,
   Post,
   Request,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/LoginDto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +24,7 @@ export class AuthController {
     return user;
   }
 
+  @UseGuards(AuthGuard)
   @Get('protected')
   getHello(@Request() req) {
     return req.user;

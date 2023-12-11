@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HashService } from 'src/hash/hash.service';
+import { JwtService } from 'src/jwt/jwt.service';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
@@ -7,6 +8,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly hashService: HashService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -19,8 +21,10 @@ export class AuthService {
       // If the user is valid, remove sensitive data and return
       delete user.email;
       delete user.hash;
-      return user;
+      const token = this.jwtService.create(user.id);
+      return { user, token };
     } catch (error) {
+      console.log(error);
       this.incorrectData();
     }
   }
