@@ -24,7 +24,6 @@ export class AuthService {
       const token = this.jwtService.create(user.id);
       return { user, token };
     } catch (error) {
-      console.log(error);
       this.incorrectData();
     }
   }

@@ -3,13 +3,14 @@ import {
   Controller,
   Get,
   Post,
-  Request,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/LoginDto';
 import { AuthGuard } from './auth.guard';
+import { GetUser } from './GetUserDecorator';
+import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -26,7 +27,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('protected')
-  getHello(@Request() req) {
-    return req.user;
+  getHello(@GetUser() user: User) {
+    return user;
   }
 }
