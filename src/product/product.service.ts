@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Product } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationOptions } from 'src/types';
 
 @Injectable()
 export class ProductService {
@@ -24,12 +25,14 @@ export class ProductService {
     }
   }
   // Get products that user have created
-  async getProductsByUser(userId: string) {
+  async getProductsByUser(userId: string, paginate: PaginationOptions) {
     try {
       const products = await this.prismaService.product.findMany({
         where: {
           createdById: userId,
         },
+        skip: (paginate.page - 1) * paginate.rows,
+        take: paginate.rows,
       });
       return products;
     } catch (error) {
