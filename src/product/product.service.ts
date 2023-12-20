@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -39,4 +40,21 @@ export class ProductService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  async createProduct(product: ProductInput, createdBy: string) {
+    try {
+      const createdProduct = this.prismaService.product.create({
+        data: { ...product, createdById: createdBy },
+      });
+      return createdProduct;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }
+
+type ProductInput = {
+  name: string;
+  description: string;
+  price: number;
+};

@@ -25,8 +25,8 @@ model Product{
   id String @id @unique() @default(uuid())
   name String
   description String
-  Price Int
-  PriceAfterDiscount Int?
+  price Int
+  priceAfterDiscount Int?
   images ProductImage[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
