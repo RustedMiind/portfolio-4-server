@@ -41,6 +41,20 @@ export class ProductService {
     }
   }
 
+  // Get products
+  async getProducts(paginate: PaginationOptions) {
+    try {
+      const products = await this.prismaService.product.findMany({
+        skip: (paginate.page - 1) * paginate.rows,
+        take: paginate.rows,
+        orderBy: { price: 'asc' },
+      });
+      return products;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
   async createProduct(product: ProductInput, createdBy: string) {
     try {
       const createdProduct = this.prismaService.product.create({
@@ -57,4 +71,5 @@ type ProductInput = {
   name: string;
   description: string;
   price: number;
+  priceAfterDiscount?: number;
 };

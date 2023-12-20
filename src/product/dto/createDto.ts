@@ -1,10 +1,5 @@
 import { Product } from '@prisma/client';
-import {
-  IsNotEmpty,
-  IsNumberString,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateDto implements Partial<Product> {
   @IsString()
@@ -15,11 +10,11 @@ export class CreateDto implements Partial<Product> {
   @IsNotEmpty()
   description: string;
 
-  @IsNumberString()
+  @IsNumber()
   @IsNotEmpty()
   price: number;
 
-  @IsNumberString()
+  @IsNumber()
   @IsOptional()
   priceAfterDiscount?: number;
 }
