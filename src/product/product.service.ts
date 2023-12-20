@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -55,14 +57,33 @@ export class ProductService {
     }
   }
 
-  async createProduct(product: ProductInput, createdBy: string) {
+  async createProduct(product: ProductInput, createdById: string) {
     try {
       const createdProduct = this.prismaService.product.create({
-        data: { ...product, createdById: createdBy },
+        data: { ...product, createdById },
       });
       return createdProduct;
     } catch (error) {
       throw new BadRequestException(error);
+    }
+  }
+
+  async updateProduct(
+    product: Partial<ProductInput>,
+    productId: string,
+    createdById: string,
+  ) {
+    try {
+      const updatedProduct = await this.prismaService.product.update({
+        where: { id: productId, createdById },
+        data: product,
+      });
+      return updatedProduct;
+    } catch (error) {
+      throw new HttpException(
+        'Product not exist or have no permission to update it',
+        400,
+      );
     }
   }
 }

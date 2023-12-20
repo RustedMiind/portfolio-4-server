@@ -4,7 +4,9 @@ import {
   DefaultValuePipe,
   Get,
   HttpException,
+  Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -48,5 +50,20 @@ export class ProductController {
       console.log(error);
       throw new HttpException(error, 500);
     }
+  }
+
+  @Patch(':id')
+  @UseGuards(AuthGuard)
+  async updateProduct(
+    @GetUser() user: RequestUserType,
+    @Param('id') id: string,
+    @Body(ValidationPipe) dto: CreateDto,
+  ) {
+    const createdProduct = await this.productService.updateProduct(
+      dto,
+      id,
+      user.id,
+    );
+    return createdProduct;
   }
 }
