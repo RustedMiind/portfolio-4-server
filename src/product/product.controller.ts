@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   HttpException,
   Param,
@@ -17,6 +18,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { GetUser } from 'src/auth/GetUserDecorator';
 import { RequestUserType } from 'src/auth/types/RequestUserType';
 import { CreateDto } from './dto/createDto';
+import { UpdateDto } from './dto/updateDto';
 
 @Controller('product')
 export class ProductController {
@@ -57,13 +59,23 @@ export class ProductController {
   async updateProduct(
     @GetUser() user: RequestUserType,
     @Param('id') id: string,
-    @Body(ValidationPipe) dto: CreateDto,
+    @Body(ValidationPipe) dto: UpdateDto,
   ) {
     const createdProduct = await this.productService.updateProduct(
       dto,
       id,
       user.id,
     );
+    return createdProduct;
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  async deleteProduct(
+    @GetUser() user: RequestUserType,
+    @Param('id') id: string,
+  ) {
+    const createdProduct = await this.productService.deleteProduct(id, user.id);
     return createdProduct;
   }
 }

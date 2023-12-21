@@ -82,7 +82,21 @@ export class ProductService {
     } catch (error) {
       throw new HttpException(
         'Product not exist or have no permission to update it',
-        400,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async deleteProduct(productId: string, createdById: string) {
+    try {
+      const updatedProduct = await this.prismaService.product.delete({
+        where: { id: productId, createdById },
+      });
+      return updatedProduct;
+    } catch (error) {
+      throw new HttpException(
+        'Product not exist or have no permission to delete it',
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

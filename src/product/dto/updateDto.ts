@@ -1,7 +1,7 @@
 import { Product } from '@prisma/client';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class CreateDto implements Partial<Product> {
+export class UpdateDto implements Partial<Product> {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
