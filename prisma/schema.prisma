@@ -19,6 +19,8 @@ model User{
   firstName String?
   lastName String?
   createdProducts Product[]
+  role Role? @relation(fields: [roleId], references: [id])
+  roleId String?
 }
 
 model Product{
@@ -40,4 +42,18 @@ model ProductImage{
   path String
   productId String
   product Product @relation(fields: [productId],references: [id])
+}
+
+model Permission {
+  id String @id @unique() @default(uuid())
+  name String @unique
+  showName String @unique
+  roles Role[]
+}
+
+model Role {
+  id String @id @unique() @default(uuid())
+  name String @unique
+  permissions Permission[]
+  users User[]
 }
