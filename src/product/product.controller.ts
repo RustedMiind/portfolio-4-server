@@ -19,6 +19,7 @@ import { GetUser } from 'src/auth/GetUserDecorator';
 import { RequestUserType } from 'src/auth/types/RequestUserType';
 import { CreateDto } from './dto/createDto';
 import { UpdateDto } from './dto/updateDto';
+import { PermissionGuard } from 'src/user/permission/permission.guard';
 
 @Controller('product')
 export class ProductController {
@@ -70,7 +71,7 @@ export class ProductController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(PermissionGuard('test'))
   async deleteProduct(
     @GetUser() user: RequestUserType,
     @Param('id') id: string,
