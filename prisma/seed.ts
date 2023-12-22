@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { PermissionEnum } from 'src/user/permission/permission.enum';
+import { PermissionEnum } from '../src/user/permission/permission.enum';
 const prisma = new PrismaClient();
 
 function seedPermissions() {
