@@ -20,7 +20,9 @@ export class AuthGuard implements CanActivate {
       }
       if (typeof decode?.id !== 'string') return false;
 
-      const userData = await this.userService.getUserById(decode?.id);
+      const userData = await this.userService.getUserByIdWithPermissions(
+        decode?.id,
+      );
       request.user = userData; // Attach user data to the request
       return true;
     } catch (error) {

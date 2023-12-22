@@ -30,6 +30,18 @@ export class UserService {
     }
   }
 
+  async getUserByIdWithPermissions(id: string) {
+    try {
+      const user = await this.prisma.user.findUniqueOrThrow({
+        where: { id },
+        include: { role: { include: { permissions: true } } },
+      });
+      return user;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.NOT_FOUND);
+    }
+  }
+
   async getAllUsers() {
     try {
       const users = await this.prisma.user.findMany();
