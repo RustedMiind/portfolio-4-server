@@ -7,10 +7,18 @@ import { PrismaModule } from './prisma/prisma.module';
 import { HashModule } from './hash/hash.module';
 import { JwtModule } from './jwt/jwt.module';
 import { ProductModule } from './product/product.module';
+import { PermissionGuard } from './user/permission/permission.guard';
 
 @Module({
-  imports: [UserModule, AuthModule, PrismaModule, HashModule, JwtModule, ProductModule],
+  imports: [
+    UserModule,
+    AuthModule,
+    PrismaModule,
+    HashModule,
+    JwtModule,
+    ProductModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PermissionGuard],
 })
 export class AppModule {}

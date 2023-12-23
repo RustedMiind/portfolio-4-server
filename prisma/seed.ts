@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Permissions } from '../src/user/permission/permission.enum';
+import { PermissionName } from '../src/user/permission/permission.enum';
 const prisma = new PrismaClient();
 
 function seedPermissions() {
@@ -8,7 +8,7 @@ function seedPermissions() {
       .createMany({
         data: [
           {
-            name: Permissions.MANAGE_ROLE,
+            name: PermissionName.MANAGE_ROLE,
             showName: 'Manage Roles',
           },
         ],

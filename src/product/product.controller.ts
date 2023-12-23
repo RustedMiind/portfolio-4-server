@@ -19,13 +19,17 @@ import { GetUser } from 'src/auth/GetUserDecorator';
 import { RequestUserType } from 'src/auth/types/RequestUserType';
 import { CreateDto } from './dto/createDto';
 import { UpdateDto } from './dto/updateDto';
+import { Permission } from 'src/user/permission/permission.decorator';
 import { PermissionGuard } from 'src/user/permission/permission.guard';
+import { PermissionName } from 'src/user/permission/permission.enum';
 
+@UseGuards(PermissionGuard)
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
+  @Permission(PermissionName.MANAGE_ROLE)
   async getProducts(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('perPage', new DefaultValuePipe(10), ParseIntPipe) perPage: number,
@@ -71,7 +75,6 @@ export class ProductController {
   }
 
   @Delete(':id')
-  @UseGuards(PermissionGuard('test'))
   async deleteProduct(
     @GetUser() user: RequestUserType,
     @Param('id') id: string,
