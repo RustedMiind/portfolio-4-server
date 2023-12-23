@@ -36,6 +36,7 @@ export class RoleService {
             connect: rolesWithPermissions,
           },
         },
+        include: { permissions: true },
       });
       return createdRole;
     } catch (error) {

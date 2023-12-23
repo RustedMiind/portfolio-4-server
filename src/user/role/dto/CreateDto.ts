@@ -1,5 +1,5 @@
 import { Role } from '@prisma/client';
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateDto implements Partial<Role> {
   @IsString()
@@ -8,5 +8,6 @@ export class CreateDto implements Partial<Role> {
 
   @IsArray()
   @IsString({ each: true })
+  @IsOptional()
   permissions: string[];
 }
