@@ -34,7 +34,7 @@ export class PermissionGuard implements CanActivate {
         decode?.id,
       );
       request.user = userData;
-      const userPermissions = userData.role.permissions;
+      const userPermissions = userData.role?.permissions;
       hasPermission = userPermissions.some(
         (userPermission) => userPermission.name === permission,
       );
