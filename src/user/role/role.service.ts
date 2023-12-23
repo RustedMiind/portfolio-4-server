@@ -40,7 +40,7 @@ export class RoleService {
       });
       return createdRole;
     } catch (error) {
-      throw new Error(`Error creating role: ${error.message}`);
+      throw new BadRequestException(error);
     }
   }
 
@@ -53,7 +53,7 @@ export class RoleService {
       });
       return createdRole;
     } catch (error) {
-      throw new Error(`Error creating role: ${error.message}`);
+      throw new BadRequestException(error);
     }
   }
 
