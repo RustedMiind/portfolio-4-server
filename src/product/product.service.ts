@@ -49,7 +49,7 @@ export class ProductService {
       const products = await this.prismaService.product.findMany({
         skip: (paginate.page - 1) * paginate.rows,
         take: paginate.rows,
-        orderBy: { price: 'asc' },
+        include: { price: { orderBy: { createdAt: 'desc' }, take: 1 } },
       });
       return products;
     } catch (error) {
@@ -58,9 +58,10 @@ export class ProductService {
   }
 
   async createProduct(product: ProductInput, createdById: string) {
+    const { price, ...productData } = product;
     try {
       const createdProduct = this.prismaService.product.create({
-        data: { ...product, createdById },
+        data: { ...productData, createdById, price: { create: { price } } },
       });
       return createdProduct;
     } catch (error) {
@@ -74,9 +75,15 @@ export class ProductService {
     createdById: string,
   ) {
     try {
+      const { price, ...productData } = product;
       const updatedProduct = await this.prismaService.product.update({
         where: { id: productId, createdById },
-        data: product,
+        data: {
+          ...productData,
+          // If Payload contains price value it connect it with the product
+          // If not just update the other fields
+          ...(price ? { price: { create: { price } } } : {}),
+        },
       });
       return updatedProduct;
     } catch (error) {

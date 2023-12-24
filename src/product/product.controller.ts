@@ -10,20 +10,16 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { AuthGuard } from 'src/auth/auth.guard';
 import { GetUser } from 'src/auth/GetUserDecorator';
 import { RequestUserType } from 'src/auth/types/RequestUserType';
 import { CreateDto } from './dto/createDto';
 import { UpdateDto } from './dto/updateDto';
 import { Permission } from 'src/user/permission/permission.decorator';
-import { PermissionGuard } from 'src/user/permission/permission.guard';
 import { PermissionName } from 'src/user/permission/permission.enum';
 
-@UseGuards(PermissionGuard)
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -42,7 +38,7 @@ export class ProductController {
   }
 
   @Post()
-  @UseGuards(AuthGuard)
+  @Permission(PermissionName.CREATE_PRODUCT)
   async createProduct(
     @GetUser() user: RequestUserType,
     @Body(ValidationPipe) dto: CreateDto,
@@ -60,7 +56,7 @@ export class ProductController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
+  @Permission(PermissionName.UPDATE_PRODUCT)
   async updateProduct(
     @GetUser() user: RequestUserType,
     @Param('id') id: string,
@@ -75,6 +71,7 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @Permission(PermissionName.DELETE_PRODUCT)
   async deleteProduct(
     @GetUser() user: RequestUserType,
     @Param('id') id: string,
