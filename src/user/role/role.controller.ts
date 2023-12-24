@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateDto } from './dto/CreateDto';
+import { AssignDto } from './dto/AssignDto';
 
 @Controller('role')
 export class RoleController {
@@ -18,5 +19,14 @@ export class RoleController {
       ? this.roleService.createRoleWithPermissions(dto.name, dto.permissions)
       : this.roleService.createRole(dto.name));
     return createdRole;
+  }
+
+  @Post('assign')
+  async assignRole(@Body(ValidationPipe) dto: AssignDto) {
+    const assignedUser = await this.roleService.assignRole(
+      dto.userId,
+      dto.roleId,
+    );
+    return assignedUser;
   }
 }
