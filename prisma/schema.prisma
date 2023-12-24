@@ -47,7 +47,7 @@ model ProductImage{
 model Permission {
   id String @id @unique() @default(uuid())
   name String @unique
-  showName String @unique
+  showName String? @unique
   roles Role[]
 }
 
