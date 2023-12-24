@@ -17,4 +17,10 @@ function seedPermissions() {
       .catch(reject);
   });
 }
-seedPermissions();
+function dropPermissions() {
+  return new Promise((resolve, reject) => {
+    prisma.permission.deleteMany().then(resolve).catch(reject);
+  });
+}
+
+dropPermissions().then(seedPermissions);
