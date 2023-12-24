@@ -4,14 +4,13 @@ const prisma = new PrismaClient();
 
 function seedPermissions() {
   return new Promise((resolve, reject) => {
+    const namesArr: string[] = [];
+    for (const value of Object.values(PermissionName)) {
+      namesArr.push(value);
+    }
     prisma.permission
       .createMany({
-        data: [
-          {
-            name: PermissionName.MANAGE_ROLE,
-            showName: 'Manage Roles',
-          },
-        ],
+        data: namesArr.map((name) => ({ name })),
       })
       .then(resolve)
       .catch(reject);
