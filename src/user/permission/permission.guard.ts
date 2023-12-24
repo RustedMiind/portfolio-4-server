@@ -36,7 +36,6 @@ export class PermissionGuard implements CanActivate {
       );
       if (userData.role) hasRole = true;
       request.user = userData;
-      console.log(userData);
       const userPermissions = userData.role.permissions;
       hasPermission = userPermissions.some(
         (userPermission) => userPermission.name === permission,
