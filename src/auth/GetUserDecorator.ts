@@ -1,9 +1,15 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  BadRequestException,
+  createParamDecorator,
+  ExecutionContext,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 
 export const GetUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): User => {
     const request = ctx.switchToHttp().getRequest();
-    return request.user as User; // Assert the type as User
+    const user = request.user;
+    if (!user) throw new BadRequestException('Cant find user to proceed');
+    else return user;
   },
 );
