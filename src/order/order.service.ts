@@ -34,9 +34,12 @@ export class OrderService {
     productsToConnect: ProductInCreateOrder[],
     buyerId: string,
   ) {
+    // Fetch products based on the given product IDs
     const products = await this.prismaService.product.findMany({
       where: { OR: productsToConnect.map((product) => ({ id: product.id })) },
     });
+
+    // Calculate the total price of the order
     let sum = 0;
     products.forEach((product) => {
       const count: number = productsToConnect.find(
@@ -44,6 +47,8 @@ export class OrderService {
       ).count;
       sum += product.price * count;
     });
+
+    // Create the order in the database
     const order = await this.prismaService.order.create({
       data: {
         buyer: { connect: { id: buyerId } },
