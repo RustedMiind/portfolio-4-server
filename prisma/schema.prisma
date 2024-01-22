@@ -55,7 +55,7 @@ model Order{
   deliveredAr DateTime?
   shippingFees Int @default(0)
   price Int
-  orders OrderItem[]
+  orderItems OrderItem[]
 }
 
 model OrderItem{
