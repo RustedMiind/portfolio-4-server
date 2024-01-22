@@ -21,6 +21,7 @@ model User{
   createdProducts Product[]
   role Role? @relation(fields: [roleId], references: [id])
   roleId String?
+  orders Order[]
 }
 
 model Product{
@@ -42,6 +43,27 @@ model ProductImage{
   path String
   productId String
   product Product @relation(fields: [productId],references: [id])
+}
+
+model Order{
+  id String @id @unique() @default(uuid())
+  buyerId String @unique()
+  buyer User @relation(fields: [buyerId],references: [id])
+  orderedAt DateTime @default(now())
+  payedAt DateTime?
+  shipedAt DateTime?
+  deliveredAr DateTime?
+  shippingFees Int @default(0)
+  price Int
+  orders OrderItem[]
+}
+
+model OrderItem{
+  id String @id @unique() @default(uuid())
+  orderId String
+  order Order @relation(fields: [orderId],references: [id])
+  price Int
+  count Int @default(1)
 }
 
 model Permission {
