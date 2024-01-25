@@ -47,7 +47,7 @@ model ProductImage{
 
 model Order{
   id String @id @unique() @default(uuid())
-  buyerId String @unique()
+  buyerId String
   buyer User @relation(fields: [buyerId],references: [id])
   orderedAt DateTime @default(now())
   payedAt DateTime?
