@@ -6,4 +6,8 @@ export enum PermissionName {
   CREATE_PRODUCT = 'create_product',
   UPDATE_PRODUCT = 'update_product',
   DELETE_PRODUCT = 'delete_product',
+  READ_ORDER = 'read_order',
+  CONFIRM_ORDER = 'confirm_order',
+  SHIP_ORDER = 'ship_order',
+  DELIVER_ORDER = 'deliver_order',
 }

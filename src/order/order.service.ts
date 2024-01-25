@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -49,29 +53,37 @@ export class OrderService {
     });
 
     // Create the order in the database
-    const order = await this.prismaService.order.create({
-      data: {
-        buyer: { connect: { id: buyerId } },
-        price: sum,
-        orderItems: {
-          createMany: {
-            data: products.map((product) => {
-              const count: number = productsToConnect.find(
-                (x) => x.id === product.id,
-              ).count;
-              return { price: product.price, count };
-            }),
+    try {
+      const order = await this.prismaService.order.create({
+        data: {
+          // buyer: { connect: { id: buyerId } },
+          buyerId,
+          price: sum,
+          orderItems: {
+            createMany: {
+              data: products.map((product) => {
+                const count: number = productsToConnect.find(
+                  (x) => x.id === product.id,
+                ).count;
+                return { price: product.price, count };
+              }),
+            },
           },
         },
-      },
-    });
-    return order;
+        include: this.includeOrders,
+      });
+      return order;
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException();
+      }
+    }
   }
 
   private readonly includeOrders = { orderItems: true };
 }
 
-type ProductInCreateOrder = {
+export interface ProductInCreateOrder {
   id: string;
   count?: number;
-};
+}
