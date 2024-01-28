@@ -10,6 +10,7 @@ import { ProductModule } from './product/product.module';
 import { PermissionGuard } from './user/permission/permission.guard';
 import { OrderModule } from './order/order.module';
 import { APP_GUARD } from '@nestjs/core';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { APP_GUARD } from '@nestjs/core';
     JwtModule,
     ProductModule,
     OrderModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [
