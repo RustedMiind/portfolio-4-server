@@ -22,6 +22,22 @@ model User{
   role Role? @relation(fields: [roleId], references: [id])
   roleId String?
   orders Order[]
+  profileImageId String? @unique()
+  profileImage File? @relation(fields: [profileImageId],references: [id])
+}
+
+
+model File {
+  // Data
+  id String @id @unique() @default(uuid())
+  path String @unique
+  collection String
+  // Relations
+  // User 1-to-1
+  user User?
+  // Product many-to-1
+  productId String? @unique()
+  products Product? @relation(fields: [productId],references: [id])
 }
 
 model Product{
@@ -30,20 +46,13 @@ model Product{
   description String
   price Int
   priceAfterDiscount Int?
-  images ProductImage[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   createdById String
   createdBy User @relation(fields: [createdById],references: [id])
+  profileImages File[]
 }
 
-model ProductImage{
-  id String @id @unique() @default(uuid())
-  name String?
-  path String
-  productId String
-  product Product @relation(fields: [productId],references: [id])
-}
 
 model Order{
   id String @id @unique() @default(uuid())

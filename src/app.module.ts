@@ -8,9 +8,11 @@ import { HashModule } from './hash/hash.module';
 import { JwtModule } from './jwt/jwt.module';
 import { ProductModule } from './product/product.module';
 import { PermissionGuard } from './user/permission/permission.guard';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { OrderModule } from './order/order.module';
 import { APP_GUARD } from '@nestjs/core';
 import { FileModule } from './file/file.module';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -22,6 +24,10 @@ import { FileModule } from './file/file.module';
     ProductModule,
     OrderModule,
     FileModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'), // Specify the path where uploaded files are stored
+      serveRoot: '/uploads',
+    }),
   ],
   controllers: [AppController],
   providers: [
