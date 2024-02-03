@@ -15,6 +15,7 @@ export class UserService {
     try {
       const user = await this.prisma.user.findUniqueOrThrow({
         where: { email },
+        include: { ...this.includeImage },
       });
       return user;
     } catch (error) {
@@ -24,7 +25,10 @@ export class UserService {
 
   async getUserById(id: string) {
     try {
-      const user = await this.prisma.user.findUniqueOrThrow({ where: { id } });
+      const user = await this.prisma.user.findUniqueOrThrow({
+        where: { id },
+        include: { ...this.includeImage },
+      });
       return user;
     } catch (error) {
       throw new HttpException(error, HttpStatus.NOT_FOUND);
@@ -36,7 +40,7 @@ export class UserService {
       const user = await this.prisma.user.findUniqueOrThrow({
         where: { id },
         include: {
-          role: { include: { permissions: true } },
+          role: { include: { permissions: true, ...this.includeImage } },
           profileImage: true,
         },
       });
@@ -48,7 +52,9 @@ export class UserService {
 
   async getAllUsers() {
     try {
-      const users = await this.prisma.user.findMany();
+      const users = await this.prisma.user.findMany({
+        include: { ...this.includeImage },
+      });
       return users;
     } catch (error) {
       throw new HttpException(error, 400);
@@ -99,4 +105,6 @@ export class UserService {
       throw new HttpException('Error occurred', HttpStatus.BAD_REQUEST);
     }
   }
+
+  private readonly includeImage = { profileImage: true };
 }
