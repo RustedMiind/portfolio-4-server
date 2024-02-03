@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { FileCollection } from 'src/file/file.enum';
 import { HashService } from 'src/hash/hash.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -34,7 +35,10 @@ export class UserService {
     try {
       const user = await this.prisma.user.findUniqueOrThrow({
         where: { id },
-        include: { role: { include: { permissions: true } } },
+        include: {
+          role: { include: { permissions: true } },
+          profileImage: true,
+        },
       });
       return user;
     } catch (error) {
@@ -60,6 +64,26 @@ export class UserService {
       return user;
     } catch (error) {
       this.handleCreateUserError(error);
+    }
+  }
+
+  async setUserProfileImage(userId: string, filePath: string) {
+    try {
+      const user = await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          profileImage: {
+            create: {
+              collection: FileCollection.USER_PROFILE_IMAGE,
+              path: filePath,
+            },
+          },
+        },
+      });
+      return user;
+    } catch (err) {
+      // throw new BadRequestException('Cant assign image to user');
+      throw new HttpException('Cant assign image to user', 500);
     }
   }
 

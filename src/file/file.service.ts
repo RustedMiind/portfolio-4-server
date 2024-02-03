@@ -1,24 +1,19 @@
 // file.service.ts
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
+import { Injectable } from '@nestjs/common';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
+export const storage = diskStorage({
+  destination: './dist/uploads',
+  filename: (req, file, cb) => {
+    const name = file.originalname.split('.')[0];
+    const extension = extname(file.originalname);
+    const randomName = Array(32)
+      .fill(null)
+      .map(() => Math.round(Math.random() * 16).toString(16))
+      .join('');
+    cb(null, `${name}-${randomName}${extension}`);
+  },
+});
 @Injectable()
-export class FileService {
-  async saveFileToLocalDisk(file: Express.Multer.File) {
-    try {
-      if (!file.buffer) {
-        throw new HttpException(
-          'File Buffer expected but null is provided',
-          HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-        );
-      }
-      const fileName = `${Date.now()}-${file.originalname}`;
-      const filePath = path.join(__dirname, '..', 'uploads', fileName);
-      fs.writeFileSync(filePath, file.buffer);
-      return { fileName };
-    } catch (error) {
-      return error;
-    }
-  }
-}
+export class FileService {}
