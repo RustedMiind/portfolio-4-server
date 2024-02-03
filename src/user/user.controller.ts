@@ -9,14 +9,16 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storage } from 'src/file/file.service';
 import { GetUser } from 'src/auth/GetUserDecorator';
 import { imageWhitelist } from 'src/constants/file-whitelist/image';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { CreateUserDto } from './dto/CreateUser.dto';
 
 @Controller('user')
 export class UserController {
@@ -28,7 +30,7 @@ export class UserController {
   }
 
   @Post()
-  createUser(@Body() userDto: Prisma.UserCreateInput) {
+  createUser(@Body(ValidationPipe) userDto: CreateUserDto) {
     return this.userService.createUser(userDto);
   }
 
