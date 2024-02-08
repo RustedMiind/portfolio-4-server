@@ -10,6 +10,8 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFiles,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
@@ -19,6 +21,7 @@ import { CreateDto } from './dto/createDto';
 import { UpdateDto } from './dto/updateDto';
 import { Permission } from 'src/user/permission/permission.decorator';
 import { PermissionName } from 'src/user/permission/permission.enum';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('product')
 export class ProductController {
@@ -68,6 +71,16 @@ export class ProductController {
       user.id,
     );
     return createdProduct;
+  }
+
+  @Patch('image/:id')
+  @Permission(PermissionName.CREATE_PRODUCT)
+  @UseInterceptors(FilesInterceptor('images'))
+  async setImagesToProject(
+    @GetUser() user: RequestUserType,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    return files;
   }
 
   @Delete(':id')

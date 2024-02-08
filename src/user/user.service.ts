@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { FileCollection } from 'src/file/file.enum';
 import { HashService } from 'src/hash/hash.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -41,7 +40,6 @@ export class UserService {
         where: { id },
         include: {
           role: { include: { permissions: true, ...this.includeImage } },
-          profileImage: true,
         },
       });
       return user;
@@ -78,12 +76,7 @@ export class UserService {
       const user = await this.prisma.user.update({
         where: { id: userId },
         data: {
-          profileImage: {
-            create: {
-              collection: FileCollection.USER_PROFILE_IMAGE,
-              path: filePath,
-            },
-          },
+          profileImage: filePath,
         },
       });
       return user;
@@ -106,5 +99,5 @@ export class UserService {
     }
   }
 
-  private readonly includeImage = { profileImage: true };
+  private readonly includeImage = {};
 }

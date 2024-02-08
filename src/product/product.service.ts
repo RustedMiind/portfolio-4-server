@@ -99,6 +99,36 @@ export class ProductService {
       );
     }
   }
+
+  async AddProjectImages(
+    productId: string,
+    imagePaths: string[],
+    createdById?: string,
+  ) {
+    try {
+      const product = await this.prismaService.product.update({
+        where: {
+          id: productId,
+          ...(createdById ? { createdById } : undefined),
+        },
+        data: {
+          images: {
+            createMany: {
+              data: imagePaths.map((imageUrl) => ({
+                imageUrl,
+              })),
+            },
+          },
+        },
+      });
+      return product;
+    } catch (error) {
+      throw new HttpException(
+        'Cannot add images to project',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
 
 type ProductInput = {
