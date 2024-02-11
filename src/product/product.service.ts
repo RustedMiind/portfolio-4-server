@@ -36,6 +36,7 @@ export class ProductService {
         },
         skip: (paginate.page - 1) * paginate.rows,
         take: paginate.rows,
+        include: { ...this.includeProductImages },
       });
       return products;
     } catch (error) {
@@ -49,6 +50,7 @@ export class ProductService {
       const products = await this.prismaService.product.findMany({
         skip: (paginate.page - 1) * paginate.rows,
         take: paginate.rows,
+        include: { ...this.includeProductImages },
       });
       return products;
     } catch (error) {
@@ -60,6 +62,7 @@ export class ProductService {
     try {
       const createdProduct = this.prismaService.product.create({
         data: { ...product, createdById },
+        include: { ...this.includeProductImages },
       });
       return createdProduct;
     } catch (error) {
@@ -76,6 +79,7 @@ export class ProductService {
       const updatedProduct = await this.prismaService.product.update({
         where: { id: productId, createdById },
         data: product,
+        include: { ...this.includeProductImages },
       });
       return updatedProduct;
     } catch (error) {
@@ -90,6 +94,7 @@ export class ProductService {
     try {
       const updatedProduct = await this.prismaService.product.delete({
         where: { id: productId, createdById },
+        include: { ...this.includeProductImages },
       });
       return updatedProduct;
     } catch (error) {
@@ -120,6 +125,7 @@ export class ProductService {
             },
           },
         },
+        include: { ...this.includeProductImages },
       });
       return product;
     } catch (error) {
@@ -129,6 +135,8 @@ export class ProductService {
       );
     }
   }
+
+  private readonly includeProductImages = { images: true };
 }
 
 type ProductInput = {

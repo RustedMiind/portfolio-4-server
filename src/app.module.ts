@@ -26,16 +26,16 @@ import { join } from 'path';
     FileModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'), // Specify the path where uploaded files are stored
-      serveRoot: '/uploads',
+      serveRoot: '/dist/uploads',
     }),
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: PermissionGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
   ],
 })
 export class AppModule {}

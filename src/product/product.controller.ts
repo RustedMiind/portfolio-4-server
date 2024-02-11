@@ -1,12 +1,15 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   DefaultValuePipe,
   Delete,
   Get,
   HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -22,6 +25,21 @@ import { UpdateDto } from './dto/updateDto';
 import { Permission } from 'src/user/permission/permission.decorator';
 import { PermissionName } from 'src/user/permission/permission.enum';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { storage } from 'src/file/file.service';
+
+// Define a function to validate file mimetype
+const imageFileFilter = (req, file, callback) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return callback(
+      new HttpException(
+        'Only image files are allowed!',
+        HttpStatus.BAD_REQUEST,
+      ),
+      false,
+    );
+  }
+  callback(null, true);
+};
 
 @Controller('product')
 export class ProductController {
@@ -73,16 +91,6 @@ export class ProductController {
     return createdProduct;
   }
 
-  @Patch('image/:id')
-  @Permission(PermissionName.CREATE_PRODUCT)
-  @UseInterceptors(FilesInterceptor('images'))
-  async setImagesToProject(
-    @GetUser() user: RequestUserType,
-    @UploadedFiles() files: Array<Express.Multer.File>,
-  ) {
-    return files;
-  }
-
   @Delete(':id')
   @Permission(PermissionName.DELETE_PRODUCT)
   async deleteProduct(
@@ -91,5 +99,34 @@ export class ProductController {
   ) {
     const createdProduct = await this.productService.deleteProduct(id, user.id);
     return createdProduct;
+  }
+
+  @Post('images/:id')
+  @Permission(PermissionName.CREATE_PRODUCT)
+  @UseInterceptors(
+    FilesInterceptor('images', undefined, {
+      fileFilter: imageFileFilter,
+      storage,
+    }),
+  )
+  async setImagesToProject(
+    @GetUser() user: RequestUserType,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Param(
+      'id',
+      new DefaultValuePipe('default'),
+      new ParseUUIDPipe({ version: '4' }),
+    )
+    id: string,
+  ) {
+    try {
+      return this.productService.AddProjectImages(
+        id,
+        files?.map((file) => file.path),
+        user.id,
+      );
+    } catch (error) {
+      throw new BadRequestException('Unexpected body');
+    }
   }
 }
