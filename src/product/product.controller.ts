@@ -46,7 +46,6 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
-  @Permission(PermissionName.MANAGE_ROLE)
   async getProducts(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('perPage', new DefaultValuePipe(10), ParseIntPipe) perPage: number,
@@ -77,8 +76,8 @@ export class ProductController {
   }
 
   @Patch(':id')
-  @Permission(PermissionName.UPDATE_PRODUCT)
-  async updateProduct(
+  @Permission(PermissionName.CREATE_PRODUCT)
+  async updateCreatedProduct(
     @GetUser() user: RequestUserType,
     @Param('id') id: string,
     @Body(ValidationPipe) dto: UpdateDto,
@@ -88,6 +87,16 @@ export class ProductController {
       id,
       user.id,
     );
+    return createdProduct;
+  }
+
+  @Patch('admin/:id')
+  @Permission(PermissionName.UPDATE_PRODUCT)
+  async updateAnyProduct(
+    @Param('id') id: string,
+    @Body(ValidationPipe) dto: UpdateDto,
+  ) {
+    const createdProduct = await this.productService.updateProduct(dto, id);
     return createdProduct;
   }
 

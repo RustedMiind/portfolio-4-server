@@ -73,7 +73,8 @@ export class ProductService {
   async updateProduct(
     product: Partial<ProductInput>,
     productId: string,
-    createdById: string,
+    // Add CreatedById if you want to strict the update only for product creator
+    createdById?: string,
   ) {
     try {
       const updatedProduct = await this.prismaService.product.update({
@@ -134,6 +135,22 @@ export class ProductService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async deleteProductImage(
+    productId: string,
+    imageId: string,
+    // Add CreatedById if you want to strict the update only for product creator
+    createdById?: string,
+  ) {
+    try {
+      const product = await this.prismaService.product.update({
+        where: { id: productId, createdById },
+        data: { images: { delete: { id: imageId } } },
+        include: this.includeProductImages,
+      });
+      return product;
+    } catch (error) {}
   }
 
   private readonly includeProductImages = { images: true };
