@@ -108,9 +108,11 @@ export class ProductService {
 
   async AddProjectImages(
     productId: string,
-    imagePaths: string[],
+    imagePaths?: string[],
     createdById?: string,
   ) {
+    if (!Array.isArray(imagePaths))
+      throw new BadRequestException('Bad images format');
     try {
       const product = await this.prismaService.product.update({
         where: {
