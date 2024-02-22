@@ -152,7 +152,9 @@ export class ProductService {
         include: this.includeProductImages,
       });
       return product;
-    } catch (error) {}
+    } catch (error) {
+      throw new BadRequestException("Couln't Delete the product image");
+    }
   }
 
   private readonly includeProductImages = { images: true };

@@ -14,6 +14,7 @@ import {
   Post,
   Query,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
@@ -26,6 +27,7 @@ import { Permission } from 'src/user/permission/permission.decorator';
 import { PermissionName } from 'src/user/permission/permission.enum';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { storage } from 'src/file/file.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 // Define a function to validate file mimetype
 const imageFileFilter = (req, file, callback) => {
@@ -132,6 +134,34 @@ export class ProductController {
       return this.productService.AddProjectImages(
         id,
         files?.map((file) => file.path),
+        user.id,
+      );
+    } catch (error) {
+      throw new BadRequestException('Unexpected body');
+    }
+  }
+
+  @Delete('images/:productId/:imageId')
+  @UseGuards(AuthGuard)
+  async deleteProductImage(
+    @GetUser() user: RequestUserType,
+    @Param(
+      'productId',
+      new DefaultValuePipe('default'),
+      new ParseUUIDPipe({ version: '4' }),
+    )
+    productId: string,
+    @Param(
+      'imageId',
+      new DefaultValuePipe('default'),
+      new ParseUUIDPipe({ version: '4' }),
+    )
+    imageId: string,
+  ) {
+    try {
+      return this.productService.deleteProductImage(
+        productId,
+        imageId,
         user.id,
       );
     } catch (error) {
