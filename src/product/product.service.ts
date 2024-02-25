@@ -15,17 +15,13 @@ export class ProductService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async getProductById(id: string): Promise<Product> {
-    try {
-      const product = await this.prismaService.product.findUnique({
-        where: { id },
-      });
-      if (product) return product;
-      throw new NotFoundException(
-        'Product you are looking for does not exist, or it might be deleted.',
-      );
-    } catch (error) {
-      throw new InternalServerErrorException(error);
-    }
+    const product = await this.prismaService.product.findUnique({
+      where: { id },
+    });
+    if (product) return product;
+    throw new NotFoundException(
+      'Product you are looking for does not exist, or it might be deleted.',
+    );
   }
   // Get products that user have created
   async getProductsByUser(userId: string, paginate: PaginationOptions) {
@@ -132,6 +128,7 @@ export class ProductService {
       });
       return product;
     } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Cannot add images to project',
         HttpStatus.INTERNAL_SERVER_ERROR,

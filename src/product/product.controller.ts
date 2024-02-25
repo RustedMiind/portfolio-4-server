@@ -59,6 +59,12 @@ export class ProductController {
     return products;
   }
 
+  @Get(':id')
+  async getProductById(@Param('id', new ParseUUIDPipe()) id: string) {
+    const products = await this.productService.getProductById(id);
+    return products;
+  }
+
   @Post()
   @Permission(PermissionName.CREATE_PRODUCT)
   async createProduct(
@@ -115,7 +121,7 @@ export class ProductController {
   @Post('images/:id')
   @Permission(PermissionName.CREATE_PRODUCT)
   @UseInterceptors(
-    FilesInterceptor('images', undefined, {
+    FilesInterceptor('images[]', undefined, {
       fileFilter: imageFileFilter,
       storage,
     }),
