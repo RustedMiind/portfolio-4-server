@@ -59,6 +59,20 @@ export class ProductController {
     return products;
   }
 
+  @Get('mine')
+  @UseGuards(AuthGuard)
+  async getMyProducts(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('perPage', new DefaultValuePipe(10), ParseIntPipe) perPage: number,
+    @GetUser() user: RequestUserType,
+  ) {
+    const products = await this.productService.getProductsByUser(user.id, {
+      page: page,
+      rows: perPage,
+    });
+    return products;
+  }
+
   @Get(':id')
   async getProductById(@Param('id', new ParseUUIDPipe()) id: string) {
     const products = await this.productService.getProductById(id);
