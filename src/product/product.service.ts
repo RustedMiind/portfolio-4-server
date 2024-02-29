@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Product } from '@prisma/client';
+import { Prisma, Product } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginationOptions } from 'src/types';
 
@@ -26,16 +26,18 @@ export class ProductService {
   }
   // Get products that user have created
   async getProductsByUser(userId: string, paginate: PaginationOptions) {
+    const where: Prisma.ProductWhereInput = {
+      createdById: userId,
+    };
     try {
       const products = await this.prismaService.product.findMany({
-        where: {
-          createdById: userId,
-        },
+        where,
         skip: (paginate.page - 1) * paginate.rows,
         take: paginate.rows,
         include: { ...this.includeProductImages },
       });
-      return products;
+      const totalCount = await this.prismaService.product.count({ where });
+      return { data: products, pages: totalCount };
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -155,7 +157,7 @@ export class ProductService {
     }
   }
 
-  private readonly includeProductImages = { images: true };
+  private readonly includeProductImages = { images: true, createdBy: true };
 }
 
 type ProductInput = {
