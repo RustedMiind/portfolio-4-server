@@ -7,6 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, Product } from '@prisma/client';
+import { paginate } from 'paginate-prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginationOptions } from 'src/types';
 
@@ -25,32 +26,38 @@ export class ProductService {
     );
   }
   // Get products that user have created
-  async getProductsByUser(userId: string, paginate: PaginationOptions) {
+  async getProductsByUser(userId: string, { page }: PaginationOptions) {
     const where: Prisma.ProductWhereInput = {
       createdById: userId,
     };
     try {
-      const products = await this.prismaService.product.findMany({
+      const products = await paginate(this.prismaService.product)(
         where,
-        skip: (paginate.page - 1) * paginate.rows,
-        take: paginate.rows,
-        include: { ...this.includeProductImages },
-      });
-      const totalCount = await this.prismaService.product.count({ where });
-      return { data: products, pages: totalCount };
+        {
+          page,
+        },
+        {
+          include: this.includeProductImages,
+        },
+      );
+      return products;
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
   }
 
   // Get products
-  async getProducts(paginate: PaginationOptions) {
+  async getProducts({ page }: PaginationOptions) {
     try {
-      const products = await this.prismaService.product.findMany({
-        skip: (paginate.page - 1) * paginate.rows,
-        take: paginate.rows,
-        include: { ...this.includeProductImages },
-      });
+      const products = await paginate(this.prismaService.product)(
+        {},
+        {
+          page,
+        },
+        {
+          include: this.includeProductImages,
+        },
+      );
       return products;
     } catch (error) {
       throw new InternalServerErrorException(error);

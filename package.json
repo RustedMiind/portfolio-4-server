@@ -38,6 +38,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "jsonwebtoken": "^9.0.2",
+    "paginate-prisma": "^1.0.156",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "prisma": "^5.6.0",

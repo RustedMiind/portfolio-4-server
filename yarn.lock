@@ -1034,6 +1034,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/lodash@^4.14.202":
+  version "4.14.202"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.202.tgz#f09dbd2fb082d507178b2f2a5c7e74bd72ff98f8"
+  integrity sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==
+
 "@types/mime@*":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-3.0.4.tgz#2198ac274de6017b44d941e00261d5bc6a0e0a45"
@@ -1133,6 +1138,11 @@
   integrity sha512-6c2ogktZ06tr2ENoZivgm7YnprnhYE4ZoXGMY+oA7IuAf17M8FWvujXZGmxLv8y0PTyts4x5A+erSwVUFA8XSg==
   dependencies:
     "@types/superagent" "*"
+
+"@types/validator@^13.11.8":
+  version "13.11.9"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.11.9.tgz#adfe96520b437a0eaa798a475877bf2f75ee402d"
+  integrity sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==
 
 "@types/validator@^13.7.10":
   version "13.11.7"
@@ -1885,6 +1895,15 @@ class-validator@^0.14.0:
     "@types/validator" "^13.7.10"
     libphonenumber-js "^1.10.14"
     validator "^13.7.0"
+
+class-validator@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.14.1.tgz#ff2411ed8134e9d76acfeb14872884448be98110"
+  integrity sha512-2VEG9JICxIqTpoK1eMzZqaV+u/EiwEJkMGzTrZf6sU/fwsnOITVgYJ8yojSy6CaXtO9V0Cc6ZQZ8h8m4UBuLwQ==
+  dependencies:
+    "@types/validator" "^13.11.8"
+    libphonenumber-js "^1.10.53"
+    validator "^13.9.0"
 
 cli-cursor@^3.1.0:
   version "3.1.0"
@@ -3779,6 +3798,11 @@ libphonenumber-js@^1.10.14:
   resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.51.tgz#a3b8c15db2721c3e5f7fe6759e2a524712b578e6"
   integrity sha512-vY2I+rQwrDQzoPds0JeTEpeWzbUJgqoV0O4v31PauHBb/e+1KCXKylHcDnBMgJZ9fH9mErsEbROJY3Z3JtqEmg==
 
+libphonenumber-js@^1.10.53:
+  version "1.10.57"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.57.tgz#4a8174014c758b8ffd865e06a43c3885706f7a9c"
+  integrity sha512-OjsEd9y4LgcX+Ig09SbxWqcGESxliDDFNVepFhB9KEsQZTrnk3UdEU+cO0sW1APvLprHstQpS23OQpZ3bwxy6Q==
+
 lines-and-columns@^1.1.6:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
@@ -4296,6 +4320,15 @@ p-try@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
+
+paginate-prisma@^1.0.156:
+  version "1.0.156"
+  resolved "https://registry.yarnpkg.com/paginate-prisma/-/paginate-prisma-1.0.156.tgz#9fd45a8bbff47cd9cbc2f107fbeaa606b22e4fbe"
+  integrity sha512-DF7AXIoKenvCs8zbCd0N+UNZszC2Z/yIpgpT7tm3UailRvh3kS8pNDABHWAQkJyZOoPR8tILDAfWITalkFyamA==
+  dependencies:
+    "@types/lodash" "^4.14.202"
+    class-validator "^0.14.1"
+    lodash "^4.17.21"
 
 parent-module@^1.0.0:
   version "1.0.1"
@@ -5309,7 +5342,7 @@ v8-to-istanbul@^9.0.1:
     "@types/istanbul-lib-coverage" "^2.0.1"
     convert-source-map "^2.0.0"
 
-validator@^13.7.0:
+validator@^13.7.0, validator@^13.9.0:
   version "13.11.0"
   resolved "https://registry.yarnpkg.com/validator/-/validator-13.11.0.tgz#23ab3fd59290c61248364eabf4067f04955fbb1b"
   integrity sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==
