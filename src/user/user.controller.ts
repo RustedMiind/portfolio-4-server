@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -14,7 +15,7 @@ import {
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { storage } from 'src/file/file.service';
+import { FileService, storage } from 'src/file/file.service';
 import { GetUser } from 'src/auth/GetUserDecorator';
 import { imageWhitelist } from 'src/constants/file-whitelist/image';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -22,7 +23,10 @@ import { CreateUserDto } from './dto/CreateUser.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly fileService: FileService,
+  ) {}
 
   @Get(':id')
   getUserById(@Param('id') id: string) {
@@ -53,7 +57,12 @@ export class UserController {
   async setProfileImage(
     @GetUser() user: User,
     @UploadedFile() file: Express.Multer.File,
+    @Headers('host') host: string,
   ) {
-    return await this.userService.setUserProfileImage(user.id, file.path);
+    const imageDetails = this.fileService.fileDetails(file, host);
+    return await this.userService.setUserProfileImage(
+      user.id,
+      imageDetails.url,
+    );
   }
 }

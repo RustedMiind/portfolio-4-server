@@ -5,6 +5,7 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
+  Headers,
   HttpException,
   HttpStatus,
   Param,
@@ -26,7 +27,7 @@ import { UpdateDto } from './dto/updateDto';
 import { Permission } from 'src/user/permission/permission.decorator';
 import { PermissionName } from 'src/user/permission/permission.enum';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { storage } from 'src/file/file.service';
+import { FileService, storage } from 'src/file/file.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 // Define a function to validate file mimetype
@@ -45,7 +46,10 @@ const imageFileFilter = (req, file, callback) => {
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly fileService: FileService,
+  ) {}
 
   @Get()
   async getProducts(
@@ -142,7 +146,8 @@ export class ProductController {
   )
   async setImagesToProject(
     @GetUser() user: RequestUserType,
-    @UploadedFiles() files: Array<Express.Multer.File>,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Headers('host') host: string,
     @Param(
       'id',
       new DefaultValuePipe('default'),
@@ -151,9 +156,10 @@ export class ProductController {
     id: string,
   ) {
     try {
+      const filesDetails = this.fileService.filesDetails(files, host);
       return this.productService.AddProjectImages(
         id,
-        files?.map((file) => file.path),
+        filesDetails?.map((file) => file.url),
         user.id,
       );
     } catch (error) {
