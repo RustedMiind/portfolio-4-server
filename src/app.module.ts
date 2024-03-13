@@ -25,8 +25,8 @@ import { join } from 'path';
     OrderModule,
     FileModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'), // Specify the path where uploaded files are stored
-      serveRoot: '/dist/uploads',
+      rootPath: join(__dirname, '..', '..', 'uploads'), // Specify the path where uploaded files are stored
+      serveRoot: '/uploads',
     }),
   ],
   controllers: [AppController],
