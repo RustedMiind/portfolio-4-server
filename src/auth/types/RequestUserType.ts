@@ -1,3 +1,9 @@
-import { User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
-export type RequestUserType = User;
+export type RequestUserType = Prisma.UserGetPayload<{
+  include: {
+    role: { include: { permissions: true } };
+    createdProducts: true;
+    orders: true;
+  };
+}>;

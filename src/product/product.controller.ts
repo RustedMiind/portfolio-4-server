@@ -84,6 +84,7 @@ export class ProductController {
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   @Permission(PermissionName.CREATE_PRODUCT)
   async createProduct(
     @GetUser() user: RequestUserType,

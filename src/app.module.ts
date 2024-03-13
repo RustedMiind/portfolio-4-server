@@ -7,10 +7,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { HashModule } from './hash/hash.module';
 import { JwtModule } from './jwt/jwt.module';
 import { ProductModule } from './product/product.module';
-import { PermissionGuard } from './user/permission/permission.guard';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { OrderModule } from './order/order.module';
-import { APP_GUARD } from '@nestjs/core';
 import { FileModule } from './file/file.module';
 import { join } from 'path';
 
@@ -30,12 +28,6 @@ import { join } from 'path';
     }),
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
