@@ -21,7 +21,6 @@ export class FileService {
     file: Express.Multer.File,
     host: string | undefined,
   ): StoredFileDetails {
-    console.log(file);
     return {
       url: `${host}/uploads/${file.filename}`,
       file,

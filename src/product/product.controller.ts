@@ -14,6 +14,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -29,6 +30,9 @@ import { PermissionName } from 'src/user/permission/permission.enum';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { FileService, storage } from 'src/file/file.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import getUrl from 'src/functions/getUrl';
+import { Request } from 'express';
+import { Url } from 'src/decorators/Url.decorator';
 
 // Define a function to validate file mimetype
 const imageFileFilter = (req, file, callback) => {
@@ -97,7 +101,6 @@ export class ProductController {
       );
       return createdProduct;
     } catch (error) {
-      console.log(error);
       throw new HttpException(error, 500);
     }
   }
@@ -155,9 +158,10 @@ export class ProductController {
       new ParseUUIDPipe({ version: '4' }),
     )
     id: string,
+    @Url() url: string,
   ) {
     try {
-      const filesDetails = this.fileService.filesDetails(files, host);
+      const filesDetails = this.fileService.filesDetails(files, url);
       return this.productService.AddProjectImages(
         id,
         filesDetails?.map((file) => file.url),

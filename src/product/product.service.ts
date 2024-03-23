@@ -138,7 +138,6 @@ export class ProductService {
       });
       return product;
     } catch (error) {
-      console.log(error);
       throw new HttpException(
         'Cannot add images to project',
         HttpStatus.INTERNAL_SERVER_ERROR,
