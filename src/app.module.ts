@@ -9,6 +9,7 @@ import { JwtModule } from './jwt/jwt.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { FileModule } from './file/file.module';
 import { join } from 'path';
+import { VariablesModule } from './variables/variables.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', '..', 'uploads'), // Specify the path where uploaded files are stored
       serveRoot: '/uploads',
     }),
+    VariablesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -37,3 +37,34 @@ model Role {
   permissions Permission[]
   users User[]
 }
+
+model KeyValue{
+  key String @id @unique()
+  value String
+}
+
+model Tool{
+  id String @id @unique() @default(uuid())
+  name String @unique
+  link String
+  experiences Experience[]
+}
+
+model Project{
+  id String @id @unique() @default(uuid())
+  name String @unique
+  link String
+  experienceId String?
+  experience Experience? @relation(fields: [experienceId],references: [id])
+}
+
+model Experience{
+  id String @id @unique() @default(uuid())
+  title String
+  description String
+  start_date DateTime
+  end_date DateTime?
+  tools Tool[]
+  org_name String
+  projects Project[]
+}
