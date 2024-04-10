@@ -48,6 +48,7 @@ model Tool{
   name String @unique
   link String
   experiences Experience[]
+  projects Project[]
 }
 
 model Project{
@@ -56,6 +57,7 @@ model Project{
   image String?
   link String
   experienceId String?
+  tools Tool[]
   experience Experience? @relation(fields: [experienceId],references: [id])
 }
 
