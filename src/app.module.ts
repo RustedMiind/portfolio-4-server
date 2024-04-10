@@ -10,6 +10,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { FileModule } from './file/file.module';
 import { join } from 'path';
 import { VariablesModule } from './variables/variables.module';
+import { ProjectModule } from './project/project.module';
+import { ExperienceModule } from './experience/experience.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { VariablesModule } from './variables/variables.module';
       serveRoot: '/uploads',
     }),
     VariablesModule,
+    ProjectModule,
+    ExperienceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
