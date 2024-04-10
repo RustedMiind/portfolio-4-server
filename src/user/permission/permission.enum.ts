@@ -10,4 +10,7 @@ export enum PermissionName {
   CREATE_EXPERIENCE = 'create_experience',
   UPDATE_EXPERIENCE = 'update_experience',
   DELETE_EXPERIENCE = 'delete_experience',
+  CREATE_TOOL = 'create_tool',
+  UPDATE_TOOL = 'update_tool',
+  DELETE_TOOL = 'delete_tool',
 }

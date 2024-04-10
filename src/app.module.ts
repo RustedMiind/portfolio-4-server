@@ -12,6 +12,7 @@ import { join } from 'path';
 import { VariablesModule } from './variables/variables.module';
 import { ProjectModule } from './project/project.module';
 import { ExperienceModule } from './experience/experience.module';
+import { ToolModule } from './tool/tool.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ExperienceModule } from './experience/experience.module';
     VariablesModule,
     ProjectModule,
     ExperienceModule,
+    ToolModule,
   ],
   controllers: [AppController],
   providers: [AppService],
