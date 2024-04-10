@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -51,5 +52,11 @@ export class ExperienceController {
       dto,
     );
     return createdExperience;
+  }
+
+  @Delete(':id')
+  @Permission(PermissionName.DELETE_EXPERIENCE)
+  async deleteTool(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.experienceService.deleteExperience(id);
   }
 }

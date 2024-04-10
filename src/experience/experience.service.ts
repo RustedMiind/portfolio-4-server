@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -68,6 +70,20 @@ export class ExperienceService {
       return createdExperience;
     } catch (error) {
       throw new BadRequestException(error);
+    }
+  }
+
+  async deleteExperience(id: string) {
+    try {
+      const deletedExperience = await this.prismaService.experience.delete({
+        where: { id },
+      });
+      return deletedExperience;
+    } catch (error) {
+      throw new HttpException(
+        "Couldn't delete the selected tool, It might be already deleted.",
+        HttpStatus.CONFLICT,
+      );
     }
   }
 }
