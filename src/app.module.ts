@@ -6,9 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { HashModule } from './hash/hash.module';
 import { JwtModule } from './jwt/jwt.module';
-import { ProductModule } from './product/product.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { OrderModule } from './order/order.module';
 import { FileModule } from './file/file.module';
 import { join } from 'path';
 
@@ -19,8 +17,6 @@ import { join } from 'path';
     PrismaModule,
     HashModule,
     JwtModule,
-    ProductModule,
-    OrderModule,
     FileModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'uploads'), // Specify the path where uploaded files are stored
