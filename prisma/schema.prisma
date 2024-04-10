@@ -53,6 +53,7 @@ model Tool{
 model Project{
   id String @id @unique() @default(uuid())
   name String @unique
+  image String?
   link String
   experienceId String?
   experience Experience? @relation(fields: [experienceId],references: [id])
