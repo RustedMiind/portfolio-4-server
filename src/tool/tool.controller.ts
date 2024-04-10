@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -36,5 +37,11 @@ export class ToolController {
     @Param('id', new ParseUUIDPipe()) id: string,
   ) {
     return await this.toolService.updateToolbyId(id, body);
+  }
+
+  @Delete(':id')
+  @Permission(PermissionName.DELETE_TOOL)
+  async deleteTool(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.toolService.deleteTool(id);
   }
 }

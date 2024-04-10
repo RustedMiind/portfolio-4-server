@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -21,5 +21,19 @@ export class ToolService {
       where: { id: toolId },
     });
     return tool;
+  }
+
+  async deleteTool(toolId: string) {
+    try {
+      const deletedTool = await this.prismaService.tool.delete({
+        where: { id: toolId },
+      });
+      return deletedTool;
+    } catch (error) {
+      throw new HttpException(
+        "Couldn't delete the selected tool, It might be already deleted.",
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 }
