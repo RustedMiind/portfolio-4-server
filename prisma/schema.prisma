@@ -18,52 +18,11 @@ model User{
   hash String
   firstName String?
   lastName String?
-  createdProducts Product[]
   role Role? @relation(fields: [roleId], references: [id])
   roleId String?
-  orders Order[]
   profileImage String?
 }
 
-model Product{
-  id String @id @unique() @default(uuid())
-  name String
-  description String
-  price Int
-  priceAfterDiscount Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  createdById String
-  createdBy User @relation(fields: [createdById],references: [id])
-  images ProductImage[]
-}
-model ProductImage{
-  id String @id @unique() @default(uuid())
-  imageUrl String
-  productId String
-  product Product @relation(fields: [productId],references: [id])
-}
-
-model Order{
-  id String @id @unique() @default(uuid())
-  buyerId String
-  buyer User @relation(fields: [buyerId],references: [id])
-  orderedAt DateTime @default(now())
-  payedAt DateTime?
-  shipedAt DateTime?
-  deliveredAr DateTime?
-  shippingFees Int @default(0)
-  price Int
-  orderItems OrderItem[]
-}
-
-model OrderItem{
-  id String @id @unique() @default(uuid())
-  orderId String
-  order Order @relation(fields: [orderId],references: [id])
-  price Int
-  count Int @default(1)
-}
 
 model Permission {
   id String @id @unique() @default(uuid())
