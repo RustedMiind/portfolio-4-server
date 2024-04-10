@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -68,6 +70,20 @@ export class ProjectService {
       return createdProduct;
     } catch (error) {
       throw new BadRequestException(error);
+    }
+  }
+
+  async deleteProject(id: string) {
+    try {
+      const deletedProject = await this.prismaService.project.delete({
+        where: { id },
+      });
+      return deletedProject;
+    } catch (error) {
+      throw new HttpException(
+        "Couldn't delete the selected tool, It might be already deleted.",
+        HttpStatus.CONFLICT,
+      );
     }
   }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -84,5 +85,11 @@ export class ProjectController {
       image: filesDetails[0]?.url ?? undefined,
     });
     return createdProduct;
+  }
+
+  @Delete(':id')
+  @Permission(PermissionName.DELETE_PROJECT)
+  async deleteTool(@Param('id', new ParseUUIDPipe()) id: string) {
+    return await this.projectService.deleteProject(id);
   }
 }
