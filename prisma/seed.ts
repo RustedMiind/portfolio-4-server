@@ -40,4 +40,11 @@ function dropVariables() {
   });
 }
 
-dropPermissions().then(seedPermissions).then(dropVariables).then(seedVariables);
+async function seed() {
+  await dropPermissions();
+  await seedPermissions();
+  await dropVariables();
+  await seedVariables();
+}
+
+seed();
