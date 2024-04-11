@@ -54,6 +54,7 @@ model Tool{
 model Project{
   id String @id @unique() @default(uuid())
   name String @unique
+  description String
   image String?
   link String
   experienceId String?

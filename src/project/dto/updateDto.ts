@@ -15,6 +15,10 @@ export class UpdateDto implements Partial<Project> {
 
   @IsString()
   @IsNotEmpty()
+  description: string;
+
+  @IsString()
+  @IsNotEmpty()
   @IsOptional()
   link: string;
 

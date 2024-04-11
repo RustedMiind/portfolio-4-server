@@ -14,6 +14,10 @@ export class CreateDto implements Partial<Project> {
 
   @IsString()
   @IsNotEmpty()
+  description: string;
+
+  @IsString()
+  @IsNotEmpty()
   link: string;
 
   @IsOptional()
