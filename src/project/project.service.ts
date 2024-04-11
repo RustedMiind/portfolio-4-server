@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, Project } from '@prisma/client';
+import { Project } from '@prisma/client';
 import { paginate } from 'paginate-prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginationOptions } from 'src/types';
@@ -19,6 +19,7 @@ export class ProjectService {
     try {
       const project = await this.prismaService.project.findUniqueOrThrow({
         where: { id },
+        include: this.defaultInclude,
       });
       return project;
     } catch (error) {
@@ -35,7 +36,7 @@ export class ProjectService {
         {
           page,
         },
-        {},
+        { include: this.defaultInclude },
       );
       return projects;
     } catch (error) {
@@ -44,13 +45,19 @@ export class ProjectService {
   }
 
   async getAllProjects() {
-    return await this.prismaService.project.findMany();
+    return await this.prismaService.project.findMany({
+      include: this.defaultInclude,
+    });
   }
 
-  async createProject(project: Prisma.ProjectCreateInput) {
+  async createProject(project: Project, tools?: string[]) {
     try {
       const createdProduct = this.prismaService.project.create({
-        data: project,
+        data: {
+          ...project,
+          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+        },
+        include: this.defaultInclude,
       });
       return createdProduct;
     } catch (error) {
@@ -60,11 +67,16 @@ export class ProjectService {
 
   async updateProject(
     projectId: string,
-    project: Partial<Prisma.ProjectCreateInput>,
+    project: Partial<Project>,
+    tools?: string[],
   ) {
     try {
       const createdProduct = this.prismaService.project.update({
-        data: project,
+        data: {
+          ...project,
+          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+        },
+        include: this.defaultInclude,
         where: { id: projectId },
       });
       return createdProduct;
@@ -86,4 +98,6 @@ export class ProjectService {
       );
     }
   }
+
+  private readonly defaultInclude = { experience: true, tools: true };
 }
