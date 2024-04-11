@@ -34,10 +34,12 @@ export class ExperienceController {
   @Post()
   @Permission(PermissionName.CREATE_EXPERIENCE)
   async createExperience(@Body(ValidationPipe) dto: CreateDto) {
-    console.log(dto);
+    const { toolsIds, ...createInputs } = dto;
     // return;
-    const createdExperience =
-      await this.experienceService.createExperience(dto);
+    const createdExperience = await this.experienceService.createExperience(
+      createInputs,
+      toolsIds,
+    );
     return createdExperience;
   }
 
@@ -47,9 +49,11 @@ export class ExperienceController {
     @Param('id') id: string,
     @Body(ValidationPipe) dto: UpdateDto,
   ) {
+    const { toolsIds, ...updateInputs } = dto;
     const createdExperience = await this.experienceService.updateExperience(
       id,
-      dto,
+      updateInputs,
+      toolsIds,
     );
     return createdExperience;
   }

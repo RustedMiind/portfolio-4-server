@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDateString,
   IsNotEmpty,
   IsOptional,
@@ -30,4 +31,9 @@ export class CreateDto {
   @IsString()
   @IsNotEmpty()
   org_name: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  toolsIds: string[];
 }

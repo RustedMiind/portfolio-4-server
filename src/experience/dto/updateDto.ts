@@ -1,5 +1,6 @@
 import { Experience } from '@prisma/client';
 import {
+  IsArray,
   IsDateString,
   IsNotEmpty,
   IsOptional,
@@ -36,4 +37,9 @@ export class UpdateDto implements Partial<Experience> {
   @IsString()
   @IsNotEmpty()
   org_name: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  toolsIds: string[];
 }

@@ -47,10 +47,16 @@ export class ExperienceService {
     return await this.prismaService.experience.findMany();
   }
 
-  async createExperience(experience: Prisma.ExperienceCreateInput) {
+  async createExperience(
+    experience: Prisma.ExperienceCreateInput,
+    tools?: string[],
+  ) {
     try {
-      const createdExperience = this.prismaService.experience.create({
-        data: experience,
+      const createdExperience = await this.prismaService.experience.create({
+        data: {
+          ...experience,
+          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+        },
       });
       return createdExperience;
     } catch (error) {
@@ -61,10 +67,14 @@ export class ExperienceService {
   async updateExperience(
     experienceId: string,
     experience: Partial<Prisma.ExperienceCreateInput>,
+    tools?: string[],
   ) {
     try {
-      const createdExperience = this.prismaService.experience.update({
-        data: experience,
+      const createdExperience = await this.prismaService.experience.update({
+        data: {
+          ...experience,
+          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+        },
         where: { id: experienceId },
       });
       return createdExperience;
