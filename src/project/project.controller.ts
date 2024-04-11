@@ -54,14 +54,18 @@ export class ProjectController {
     @UploadedFiles() files: Express.Multer.File[],
     @Url() url: string,
   ) {
+    const { toolsIds, ...createInputs } = dto;
     const filesDetails = this.fileService.filesDetails(files, url);
     if (!filesDetails?.[0]) {
       throw new UnprocessableEntityException('Image must be provided');
     }
-    const createdProduct = await this.projectService.createProject({
-      ...dto,
-      image: filesDetails[0].url,
-    });
+    const createdProduct = await this.projectService.createProject(
+      {
+        ...createInputs,
+        image: filesDetails[0].url,
+      },
+      toolsIds,
+    );
     return createdProduct;
   }
 
@@ -79,11 +83,16 @@ export class ProjectController {
     @Url() url: string,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
+    const { toolsIds, ...updateInputs } = dto;
     const filesDetails = this.fileService.filesDetails(files, url);
-    const createdProduct = await this.projectService.updateProject(id, {
-      ...dto,
-      image: filesDetails[0]?.url ?? undefined,
-    });
+    const createdProduct = await this.projectService.updateProject(
+      id,
+      {
+        ...updateInputs,
+        image: filesDetails[0]?.url ?? undefined,
+      },
+      toolsIds,
+    );
     return createdProduct;
   }
 
