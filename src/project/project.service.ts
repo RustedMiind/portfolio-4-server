@@ -55,7 +55,9 @@ export class ProjectService {
       const createdProduct = await this.prismaService.project.create({
         data: {
           ...project,
-          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+          tools: tools
+            ? { connect: tools?.map((tool) => ({ id: tool })) }
+            : undefined,
         },
         include: this.defaultInclude,
       });
@@ -74,13 +76,17 @@ export class ProjectService {
       const createdProduct = await this.prismaService.project.update({
         data: {
           ...project,
-          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+
+          tools: tools
+            ? { connect: tools?.map((tool) => ({ id: tool })) }
+            : undefined,
         },
         include: this.defaultInclude,
         where: { id: projectId },
       });
       return createdProduct;
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(error);
     }
   }

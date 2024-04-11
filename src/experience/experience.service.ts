@@ -55,7 +55,9 @@ export class ExperienceService {
       const createdExperience = await this.prismaService.experience.create({
         data: {
           ...experience,
-          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+          tools: tools
+            ? { connect: tools?.map((tool) => ({ id: tool })) }
+            : undefined,
         },
       });
       return createdExperience;
@@ -73,7 +75,9 @@ export class ExperienceService {
       const createdExperience = await this.prismaService.experience.update({
         data: {
           ...experience,
-          tools: { connect: tools?.map((tool) => ({ id: tool })) },
+          tools: tools
+            ? { connect: tools?.map((tool) => ({ id: tool })) }
+            : undefined,
         },
         where: { id: experienceId },
       });
