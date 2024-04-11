@@ -1,4 +1,5 @@
 import {
+  BadGatewayException,
   Body,
   Controller,
   Get,
@@ -28,6 +29,19 @@ export class UserController {
     private readonly fileService: FileService,
   ) {}
 
+  @Get('create-admin-account')
+  async createAdminAccount() {
+    if (process.env.MODE === 'dev') {
+      try {
+        return await this.userService.createAdminAccount();
+      } catch (error) {
+        console.log(error);
+      }
+    } else
+      throw new BadGatewayException(
+        'This request available only in development mode',
+      );
+  }
   @Get(':id')
   getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
