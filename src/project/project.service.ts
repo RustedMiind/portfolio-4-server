@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Project } from '@prisma/client';
+import { Prisma, Project } from '@prisma/client';
 import { paginate } from 'paginate-prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginationOptions } from 'src/types';
@@ -50,9 +50,9 @@ export class ProjectService {
     });
   }
 
-  async createProject(project: Project, tools?: string[]) {
+  async createProject(project: Prisma.ProjectCreateInput, tools?: string[]) {
     try {
-      const createdProduct = this.prismaService.project.create({
+      const createdProduct = await this.prismaService.project.create({
         data: {
           ...project,
           tools: { connect: tools?.map((tool) => ({ id: tool })) },
@@ -71,7 +71,7 @@ export class ProjectService {
     tools?: string[],
   ) {
     try {
-      const createdProduct = this.prismaService.project.update({
+      const createdProduct = await this.prismaService.project.update({
         data: {
           ...project,
           tools: { connect: tools?.map((tool) => ({ id: tool })) },
