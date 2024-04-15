@@ -19,6 +19,7 @@ export class ExperienceService {
     try {
       const experience = await this.prismaService.experience.findUniqueOrThrow({
         where: { id },
+        include: this.defaultInclude,
       });
       return experience;
     } catch (error) {
@@ -35,7 +36,9 @@ export class ExperienceService {
         {
           page,
         },
-        {},
+        {
+          include: this.defaultInclude,
+        },
       );
       return experiences;
     } catch (error) {
@@ -44,7 +47,10 @@ export class ExperienceService {
   }
 
   async getAllExperiences() {
-    return await this.prismaService.experience.findMany();
+    return await this.prismaService.experience.findMany({
+      orderBy: { start_date: 'desc' },
+      include: this.defaultInclude,
+    });
   }
 
   async createExperience(
@@ -59,6 +65,7 @@ export class ExperienceService {
             ? { connect: tools?.map((tool) => ({ id: tool })) }
             : undefined,
         },
+        include: this.defaultInclude,
       });
       return createdExperience;
     } catch (error) {
@@ -76,10 +83,11 @@ export class ExperienceService {
         data: {
           ...experience,
           tools: tools
-            ? { connect: tools?.map((tool) => ({ id: tool })) }
+            ? { set: tools?.map((tool) => ({ id: tool })) }
             : undefined,
         },
         where: { id: experienceId },
+        include: this.defaultInclude,
       });
       return createdExperience;
     } catch (error) {
@@ -100,4 +108,6 @@ export class ExperienceService {
       );
     }
   }
+
+  private readonly defaultInclude = { tools: true };
 }
