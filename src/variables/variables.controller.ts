@@ -26,6 +26,11 @@ export class VariablesController {
     return dtoObject;
   }
 
+  @Get('default')
+  async getAllVariablesAsArray() {
+    return { variables: await this.variablesService.getAllVariable() };
+  }
+
   @Get(':key')
   async getVariable(
     @Param('key')
