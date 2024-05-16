@@ -31,15 +31,11 @@ export class UserController {
 
   @Get('create-admin-account')
   async createAdminAccount() {
-    if (process.env.MODE === 'dev') {
-      try {
-        return await this.userService.createAdminAccount();
-      } catch (error) {
-        console.log(error);
-      }
+    if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+      return await this.userService.createAdminAccount();
     } else
       throw new BadGatewayException(
-        'This request available only in development mode',
+        'Add Admin Credentials in the env variables',
       );
   }
   @Get(':id')

@@ -89,8 +89,8 @@ export class UserService {
   async createAdminAccount() {
     const allPermissions = await this.prisma.permission.findMany();
     const user = await this.createUser({
-      email: 'admin@admin.com',
-      hash: 'Test1234',
+      email: process.env.ADMIN_EMAIL,
+      hash: process.env.ADMIN_PASSWORD,
       role: {
         create: {
           name: 'admin',
