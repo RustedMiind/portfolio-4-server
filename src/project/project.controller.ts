@@ -1,12 +1,15 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UnprocessableEntityException,
   UploadedFiles,
   UseInterceptors,
@@ -30,8 +33,11 @@ export class ProjectController {
   ) {}
 
   @Get()
-  async getProducts() {
-    const products = await this.projectService.getAllProjects();
+  async getProducts(
+    @Query('limit', new DefaultValuePipe(100), ParseIntPipe)
+    limit?: number,
+  ) {
+    const products = await this.projectService.getAllProjects({ limit });
     return products;
   }
 

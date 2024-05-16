@@ -1,12 +1,15 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { Permission } from 'src/user/permission/permission.decorator';
@@ -20,8 +23,13 @@ export class ExperienceController {
   constructor(private readonly experienceService: ExperienceService) {}
 
   @Get()
-  async getExperiences() {
-    const experiences = await this.experienceService.getAllExperiences();
+  async getExperiences(
+    @Query('limit', new DefaultValuePipe(100), ParseIntPipe)
+    limit?: number,
+  ) {
+    const experiences = await this.experienceService.getAllExperiences({
+      limit,
+    });
     return experiences;
   }
 

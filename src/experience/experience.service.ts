@@ -46,10 +46,11 @@ export class ExperienceService {
     }
   }
 
-  async getAllExperiences() {
+  async getAllExperiences(params?: { limit?: number }) {
     return await this.prismaService.experience.findMany({
       orderBy: { start_date: 'desc' },
       include: this.defaultInclude,
+      take: params?.limit,
     });
   }
 
