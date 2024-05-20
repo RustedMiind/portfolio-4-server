@@ -13,6 +13,7 @@ import { VariablesModule } from './variables/variables.module';
 import { ProjectModule } from './project/project.module';
 import { ExperienceModule } from './experience/experience.module';
 import { ToolModule } from './tool/tool.module';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ToolModule } from './tool/tool.module';
     ProjectModule,
     ExperienceModule,
     ToolModule,
+    MailerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
