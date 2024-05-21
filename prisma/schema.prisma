@@ -72,3 +72,13 @@ model Experience{
   org_name String
   projects Project[]
 }
+
+model Mails {
+  id String @id @unique() @default(uuid())
+  createdAt DateTime @default(now())
+  sender_name String
+  sender_email String
+  org_name String?
+  subject String
+  body String
+}
