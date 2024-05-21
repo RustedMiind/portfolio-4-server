@@ -1,4 +1,4 @@
-import nodeMailer from 'nodemailer';
+import { createTransport } from 'nodemailer';
 
 async function sendEmail(
   userEmail: string,
@@ -7,7 +7,7 @@ async function sendEmail(
 ) {
   const SENDER_EMAIL = process.env.APP_EMAIL_ADDRESS as string;
   try {
-    const transporter = nodeMailer.createTransport({
+    const transporter = createTransport({
       service: 'gmail',
       auth: {
         user: SENDER_EMAIL,
