@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsBoolean,
   IsDateString,
   IsNotEmpty,
   IsOptional,
@@ -36,4 +37,8 @@ export class CreateDto {
   @IsArray()
   @IsString({ each: true })
   toolsIds: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  featured: boolean;
 }

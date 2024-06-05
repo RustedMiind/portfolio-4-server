@@ -1,6 +1,7 @@
 import { Project } from '@prisma/client';
 import {
   IsArray,
+  IsBoolean,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -30,4 +31,8 @@ export class UpdateDto implements Partial<Project> {
   @IsArray()
   @IsString({ each: true })
   toolsIds: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  featured: boolean;
 }
