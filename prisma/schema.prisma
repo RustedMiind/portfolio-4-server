@@ -60,6 +60,7 @@ model Project{
   experienceId String?
   tools Tool[]
   experience Experience? @relation(fields: [experienceId],references: [id])
+  featured Boolean @default(false)
 }
 
 model Experience{
@@ -71,6 +72,7 @@ model Experience{
   tools Tool[]
   org_name String
   projects Project[]
+  featured Boolean @default(false)
 }
 
 model Mails {
