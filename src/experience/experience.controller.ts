@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   ParseUUIDPipe,
   Patch,
@@ -25,10 +26,13 @@ export class ExperienceController {
   @Get()
   async getExperiences(
     @Query('limit', new DefaultValuePipe(100), ParseIntPipe)
+    @Query('featured', ParseBoolPipe)
+    featured: boolean,
     limit?: number,
   ) {
     const experiences = await this.experienceService.getAllExperiences({
       limit,
+      featured,
     });
     return experiences;
   }

@@ -44,10 +44,13 @@ export class ProjectService {
     }
   }
 
-  async getAllProjects(params?: { limit?: number }) {
+  async getAllProjects(params?: { limit?: number; featured?: boolean }) {
     return await this.prismaService.project.findMany({
       include: this.defaultInclude,
       take: params?.limit,
+      ...(params?.featured
+        ? { where: { featured: { equals: true } } }
+        : undefined),
     });
   }
 

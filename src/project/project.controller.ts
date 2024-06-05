@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   ParseUUIDPipe,
   Patch,
@@ -36,8 +37,13 @@ export class ProjectController {
   async getProducts(
     @Query('limit', new DefaultValuePipe(100), ParseIntPipe)
     limit?: number,
+    @Query('featured', new DefaultValuePipe(false), ParseBoolPipe)
+    featured?: boolean,
   ) {
-    const products = await this.projectService.getAllProjects({ limit });
+    const products = await this.projectService.getAllProjects({
+      limit,
+      featured,
+    });
     return products;
   }
 
