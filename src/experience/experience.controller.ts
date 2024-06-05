@@ -18,6 +18,7 @@ import { PermissionName } from 'src/user/permission/permission.enum';
 import { CreateDto } from './dto/createDto';
 import { UpdateDto } from './dto/updateDto';
 import { ExperienceService } from './experience.service';
+import { ParseFormDataBooleanPipe } from 'src/decorators/ParseFormDataBooleanPipe';
 
 @Controller('experience')
 export class ExperienceController {
@@ -45,11 +46,16 @@ export class ExperienceController {
 
   @Post()
   @Permission(PermissionName.CREATE_EXPERIENCE)
-  async createExperience(@Body(ValidationPipe) dto: CreateDto) {
+  async createExperience(
+    @Body(ValidationPipe) dto: CreateDto,
+    @Body('featured', new DefaultValuePipe(false), ParseFormDataBooleanPipe)
+    featured?: boolean,
+  ) {
     const { toolsIds, ...createInputs } = dto;
     // return;
     const createdExperience = await this.experienceService.createExperience(
-      createInputs,
+      { ...createInputs, featured },
+
       toolsIds,
     );
     return createdExperience;

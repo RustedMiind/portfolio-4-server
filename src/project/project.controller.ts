@@ -25,6 +25,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { imageFileFilter } from 'src/functions/imageFileFilter';
 import { Url } from 'src/decorators/Url.decorator';
 import { UpdateDto } from './dto/updateDto';
+import { ParseFormDataBooleanPipe } from 'src/decorators/ParseFormDataBooleanPipe';
 
 @Controller('project')
 export class ProjectController {
@@ -65,6 +66,8 @@ export class ProjectController {
     @Body(ValidationPipe) dto: CreateDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Url() url: string,
+    @Body('featured', new DefaultValuePipe(false), ParseFormDataBooleanPipe)
+    featured?: boolean,
   ) {
     const { toolsIds, ...createInputs } = dto;
     const filesDetails = this.fileService.filesDetails(files, url);
@@ -74,6 +77,7 @@ export class ProjectController {
     const createdProduct = await this.projectService.createProject(
       {
         ...createInputs,
+        featured,
         image: filesDetails[0].url,
       },
       toolsIds,
@@ -94,6 +98,8 @@ export class ProjectController {
     @Body(ValidationPipe) dto: UpdateDto,
     @Url() url: string,
     @UploadedFiles() files: Express.Multer.File[],
+    @Body('featured', new DefaultValuePipe(false), ParseFormDataBooleanPipe)
+    featured?: boolean,
   ) {
     const { toolsIds, ...updateInputs } = dto;
     const filesDetails = this.fileService.filesDetails(files, url);
@@ -101,6 +107,7 @@ export class ProjectController {
       id,
       {
         ...updateInputs,
+        featured,
         image: filesDetails[0]?.url ?? undefined,
       },
       toolsIds,
