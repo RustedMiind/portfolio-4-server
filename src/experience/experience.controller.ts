@@ -26,9 +26,9 @@ export class ExperienceController {
   @Get()
   async getExperiences(
     @Query('limit', new DefaultValuePipe(100), ParseIntPipe)
-    @Query('featured', ParseBoolPipe)
-    featured: boolean,
     limit?: number,
+    @Query('featured', new DefaultValuePipe(false), ParseBoolPipe)
+    featured?: boolean,
   ) {
     const experiences = await this.experienceService.getAllExperiences({
       limit,
