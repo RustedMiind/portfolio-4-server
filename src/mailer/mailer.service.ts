@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { renderFile } from 'ejs';
 import { join } from 'path';
-import sendEmail from 'src/functions/sendEmail';
+import sendEmail from 'src/utils/sendEmail';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()

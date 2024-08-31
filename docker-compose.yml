@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test123
-      POSTGRES_DB: portfolio
+      POSTGRES_DB: restaurant
     networks:
       - freecodecamp
   test-db:
@@ -17,7 +17,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test123
-      POSTGRES_DB: portfolio
+      POSTGRES_DB: restaurant
     networks:
       - freecodecamp
 networks:

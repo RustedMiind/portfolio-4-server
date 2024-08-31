@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
-import getUrl from 'src/functions/getUrl';
+import getUrl from 'src/utils/getUrl';
 
 export const Url = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): string => {
