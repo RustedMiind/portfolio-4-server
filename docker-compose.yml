@@ -3,7 +3,7 @@ services:
   dev-db:
     image: postgres:13
     ports:
-      - 5435:5433
+      - 5434:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test123
@@ -13,7 +13,7 @@ services:
   test-db:
     image: postgres:13
     ports:
-      - 5435:5433
+      - 5434:5433
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test123

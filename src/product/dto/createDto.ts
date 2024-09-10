@@ -1,20 +1,11 @@
-import { Product } from '@prisma/client';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
 
-export class CreateDto implements Partial<Product> {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+export const CreateSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required'),
+  price: z.number().nonnegative(),
+  priceAfterDiscount: z.number().optional(),
+});
 
-  @IsString()
-  @IsNotEmpty()
-  description: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  price: number;
-
-  @IsNumber()
-  @IsOptional()
-  priceAfterDiscount?: number;
-}
+export class CreateDto extends createZodDto(CreateSchema) {}
