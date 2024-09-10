@@ -1,13 +1,9 @@
-import { IsInt, IsPositive, IsOptional } from 'class-validator';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
 
-export class PaginationQueriesDto {
-  @IsInt()
-  @IsPositive()
-  @IsOptional()
-  page?: number;
+export const PaginationQueriesSchema = z.object({
+  page: z.number().int().positive().optional(),
+  perPage: z.number().int().positive().optional(),
+});
 
-  @IsInt()
-  @IsPositive()
-  @IsOptional()
-  perPage?: number;
-}
+export class CredentialsDto extends createZodDto(PaginationQueriesSchema) {}

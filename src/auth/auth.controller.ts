@@ -28,7 +28,6 @@ export class AuthController {
   @Get('user')
   @UseGuards(AuthGuard)
   async getUserData(@GetUser() user?: User) {
-    delete user?.hash;
     return user;
   }
 

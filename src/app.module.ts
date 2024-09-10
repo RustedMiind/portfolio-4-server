@@ -11,6 +11,8 @@ import { FileModule } from './file/file.module';
 import { join } from 'path';
 import { VariablesModule } from './variables/variables.module';
 import { MailerModule } from './mailer/mailer.module';
+import { APP_PIPE } from '@nestjs/core';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 @Module({
   imports: [
@@ -28,6 +30,12 @@ import { MailerModule } from './mailer/mailer.module';
     MailerModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
+  ],
 })
 export class AppModule {}

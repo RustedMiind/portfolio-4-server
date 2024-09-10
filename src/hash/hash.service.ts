@@ -15,6 +15,7 @@ export class HashService {
     hash?: string,
   ): Promise<boolean> {
     try {
+      if (!(plainTextPassword && hash)) throw new Error();
       const passwordsSame = await bcrypt.compare(plainTextPassword, hash);
       return passwordsSame;
     } catch (err) {

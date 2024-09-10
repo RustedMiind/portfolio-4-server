@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { HashService } from 'src/hash/hash.service';
 import { JwtService } from 'src/jwt/jwt.service';
 import { UserService } from 'src/user/user.service';
@@ -19,8 +20,7 @@ export class AuthService {
       }
 
       // If the user is valid, remove sensitive data and return
-      delete user.email;
-      delete user.hash;
+      delete (user as Partial<User>).hash;
       const token = this.jwtService.create(user.id);
       return { user, token };
     } catch (error) {

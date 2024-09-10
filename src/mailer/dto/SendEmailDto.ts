@@ -1,25 +1,17 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'nestjs-zod/z';
 import { MailT } from '../mailer.service';
 
-export class SendEmailDto implements MailT {
-  @IsString()
-  @IsNotEmpty()
-  body: string;
+const SendEmailSchema = z.object({
+  subject: z.string(),
+  body: z.string(),
+  sender_email: z.string().email(),
+  sender_name: z.string(),
+  org_name: z.string().optional(),
+});
 
-  @IsString()
-  @IsNotEmpty()
-  subject: string;
+export class SendEmailDto
+  extends createZodDto(SendEmailSchema)
+  implements MailT {}
 
-  @IsString()
-  @IsEmail()
-  @IsNotEmpty()
-  sender_email: string;
-
-  @IsString()
-  @IsNotEmpty()
-  sender_name: string;
-
-  @IsString()
-  @IsOptional()
-  org_name?: string;
-}
+// Now `SendEmailDto` can be used in NestJS with zod validation.

@@ -9,7 +9,11 @@ export const GetUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): User => {
     const request = ctx.switchToHttp().getRequest();
     const user = request.user;
+
     if (!user) throw new BadRequestException('Cant find user to proceed');
-    else return user;
+    else {
+      delete (user as Partial<User>).hash;
+      return user;
+    }
   },
 );
