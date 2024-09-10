@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { VariablesService } from './variables.service';
 import { Variables } from './variables.enum';
 import { SetVariableDto } from './dto/SetVariable.dto';
@@ -41,7 +34,7 @@ export class VariablesController {
 
   @Permission(PermissionName.UPDATE_VARIABLE)
   @Post('')
-  async setVariable(@Body(ValidationPipe) { key, value }: SetVariableDto) {
+  async setVariable(@Body() { key, value }: SetVariableDto) {
     return await this.variablesService.setVariable(key, value);
   }
 }

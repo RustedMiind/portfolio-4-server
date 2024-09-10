@@ -11,7 +11,6 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  ValidationPipe,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { UserService } from './user.service';
@@ -44,7 +43,7 @@ export class UserController {
   }
 
   @Post()
-  createUser(@Body(ValidationPipe) userDto: CreateUserDto) {
+  createUser(@Body() userDto: CreateUserDto) {
     return this.userService.createUser(userDto);
   }
 

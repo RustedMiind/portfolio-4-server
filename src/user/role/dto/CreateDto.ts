@@ -1,13 +1,9 @@
-import { Role } from '@prisma/client';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
 
-export class CreateDto implements Partial<Role> {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+const CreateSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  permissions: z.array(z.string().uuid()).optional(),
+});
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  permissions: string[];
-}
+export class CreateDto extends createZodDto(CreateSchema) {}

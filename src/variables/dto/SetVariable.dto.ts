@@ -1,10 +1,12 @@
-import { IsEnum, IsString } from 'class-validator';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
 import { Variables } from '../variables.enum';
 
-export class SetVariableDto {
-  @IsEnum(Variables)
-  key: Variables;
+const SetVariableSchema = z.object({
+  key: z.nativeEnum(Variables, {
+    errorMap: () => ({ message: 'Invalid enum value for key' }),
+  }),
+  value: z.string(),
+});
 
-  @IsString()
-  value: string;
-}
+export class SetVariableDto extends createZodDto(SetVariableSchema) {}

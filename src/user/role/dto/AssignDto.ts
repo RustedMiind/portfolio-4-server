@@ -1,11 +1,9 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
 
-export class AssignDto {
-  @IsString()
-  @IsNotEmpty()
-  roleId: string;
+const AssignSchema = z.object({
+  roleId: z.string().uuid(),
+  userId: z.string().uuid(),
+});
 
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
-}
+export class AssignDto extends createZodDto(AssignSchema) {}

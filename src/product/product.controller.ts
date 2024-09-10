@@ -17,7 +17,6 @@ import {
   UploadedFiles,
   UseGuards,
   UseInterceptors,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { GetUser } from 'src/auth/GetUserDecorator';
@@ -89,7 +88,7 @@ export class ProductController {
   @Permission(PermissionName.CREATE_PRODUCT)
   async createProduct(
     @GetUser() user: RequestUserType,
-    @Body(ValidationPipe) dto: CreateDto,
+    @Body() dto: CreateDto,
   ) {
     try {
       const createdProduct = await this.productService.createProduct(
@@ -107,7 +106,7 @@ export class ProductController {
   async updateCreatedProduct(
     @GetUser() user: RequestUserType,
     @Param('id') id: string,
-    @Body(ValidationPipe) dto: UpdateDto,
+    @Body() dto: UpdateDto,
   ) {
     const createdProduct = await this.productService.updateProduct(
       dto,
@@ -119,10 +118,7 @@ export class ProductController {
 
   @Patch('admin/:id')
   @Permission(PermissionName.UPDATE_PRODUCT)
-  async updateAnyProduct(
-    @Param('id') id: string,
-    @Body(ValidationPipe) dto: UpdateDto,
-  ) {
+  async updateAnyProduct(@Param('id') id: string, @Body() dto: UpdateDto) {
     const createdProduct = await this.productService.updateProduct(dto, id);
     return createdProduct;
   }
