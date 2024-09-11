@@ -23,6 +23,7 @@ model User{
   profileImage String?
   orders Order[]
   createdProducts Product[]
+  OrdersStatuses OrderStatus[]
 }
 
 
@@ -49,13 +50,19 @@ model Product{
   id String @id @unique() @default(uuid())
   name String
   description String
-  price Int
-  priceAfterDiscount Int?
+  price Float
+  priceAfterDiscount Float?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   createdById String
   createdBy User @relation(fields: [createdById],references: [id])
   images ProductImage[]
+  categories         ProductCategory[] @relation("ProductCategories")
+}
+model ProductCategory {
+  id       String     @id @unique @default(uuid())
+  name     String
+  products Product[]  @relation("ProductCategories")
 }
 model ProductImage{
   id String @id @unique() @default(uuid())
@@ -63,18 +70,15 @@ model ProductImage{
   productId String
   product Product @relation(fields: [productId],references: [id])
 }
-model Order{
-  id String @id @unique() @default(uuid())
-  buyerId String
-  buyer User @relation(fields: [buyerId],references: [id])
-  orderedAt DateTime @default(now())
-  status String? @default("still_cart")
-  payedAt DateTime?
-  shipedAt DateTime?
-  deliveredAt DateTime?
-  shippingFees Int @default(0)
-  price Int
-  orderItems OrderItem[]
+model Order {
+  id          String         @id @unique @default(uuid())
+  buyerId     String
+  buyer       User           @relation(fields: [buyerId], references: [id])
+  orderedAt   DateTime       @default(now())
+  shippingFees Int           @default(0)
+  price       Int
+  orderItems  OrderItem[]
+  statuses    OrderStatus[]  // One-to-many relation
 }
 model OrderItem{
   id String @id @unique() @default(uuid())
@@ -83,6 +87,27 @@ model OrderItem{
   price Int
   count Int @default(1)
 }
+model OrderStatus {
+  id           String           @id @unique @default(uuid())
+  status       OrderStatusEnum
+  note         String?
+  timestamp    DateTime         @default(now()) // Time when this status was applied
+  orderId      String
+  order        Order            @relation(fields: [orderId], references: [id])
+  submittedById String
+  submittedBy  User             @relation(fields: [submittedById], references: [id])
+}
+// Enum for order statuses
+enum OrderStatusEnum {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+  REFUSED
+  DONE
+}
+
 
 model Mails {
   id String @id @unique() @default(uuid())
