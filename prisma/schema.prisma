@@ -41,7 +41,7 @@ model Role {
 
 model KeyValue{
   key String @id @unique()
-  value String
+  value String @db.VarChar(500)
 }
 
 model Tool{
