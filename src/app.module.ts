@@ -14,6 +14,7 @@ import { ProjectModule } from './project/project.module';
 import { ExperienceModule } from './experience/experience.module';
 import { ToolModule } from './tool/tool.module';
 import { MailerModule } from './mailer/mailer.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MailerModule } from './mailer/mailer.module';
     ExperienceModule,
     ToolModule,
     MailerModule,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -17,6 +17,8 @@ model User{
   updatedAt DateTime @updatedAt
   email String @unique()
   hash String
+  salary Int @default(35000)
+  shifts Shift[]
   firstName String?
   lastName String?
   role Role? @relation(fields: [roleId], references: [id])
@@ -74,6 +76,16 @@ model Experience{
   org_name String
   projects Project[]
   featured Boolean @default(false)
+}
+
+model Shift{
+  id Int @id @default(autoincrement())
+  userId String
+  user User @relation(fields: [userId],references: [id])
+  startDate DateTime
+  endDate DateTime
+  totalHours Float
+  pay Float
 }
 
 model Mails {
