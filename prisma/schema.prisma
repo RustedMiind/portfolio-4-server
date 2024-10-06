@@ -19,6 +19,8 @@ model User{
   hash String
   firstName String?
   lastName String?
+  shifts Shift[]
+  salary Int @default(35000)
   role Role? @relation(fields: [roleId], references: [id])
   roleId String?
   profileImage String?
@@ -62,6 +64,16 @@ model Project{
   tools Tool[]
   experience Experience? @relation(fields: [experienceId],references: [id])
   featured Boolean @default(false)
+}
+
+model Shift{
+  id Int @id @unique() @default(autoincrement())
+  userId String
+  user User @relation(references: [id], fields: [userId])
+  start DateTime
+  end DateTime
+  totalHours Float
+  pay Float
 }
 
 model Experience{
