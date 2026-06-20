@@ -1,24 +1,68 @@
 version: '3.8'
 services:
-  dev-db:
-    image: postgres:13
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio-backend
+    restart: unless-stopped
+    env_file: [.env]
     ports:
-      - 5434:5432
+      - 3101:3101
+    networks:
+      - portfolio-backend-network
+      - portfolio-shadow-network
+      - traefik_public
+    depends_on:
+      db:
+        condition: service_started
+      shadow-db:
+        condition: service_started
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.portfolio-backend.rule=Host(`server.alisoliman.net`)'
+      - 'traefik.http.routers.portfolio-backend.entrypoints=websecure'
+      - 'traefik.http.routers.portfolio-backend.service=portfolio-backend'
+      - 'traefik.http.routers.portfolio-backend.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.portfolio-backend.loadbalancer.server.port=3101'
+      - 'traefik.http.services.portfolio-backend.loadbalancer.server.scheme=http'
+      - 'traefik.http.services.portfolio-backend.loadbalancer.passhostheader=true'
+  db:
+    image: postgres:17-alpine
+    container_name: portfolio-db
+    ports:
+      - 5437:5432
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: test123
+      POSTGRES_PASSWORD: test1234@
       POSTGRES_DB: portfolio
     networks:
-      - freecodecamp
-  test-db:
-    image: postgres:13
+      - portfolio-backend-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  shadow-db:
+    image: postgres:17-alpine
+    container_name: shadow_portfolio
     ports:
-      - 5435:5432
+      - 5438:5432
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: test123
-      POSTGRES_DB: portfolio
+      POSTGRES_PASSWORD: test1234@
+      POSTGRES_DB: shadow_portfolio
     networks:
-      - freecodecamp
+      - portfolio-shadow-network
+    volumes:
+      - shadow-postgres-data:/var/lib/postgresql/data
+
 networks:
-  freecodecamp:
+  portfolio-backend-network:
+    driver: bridge
+  portfolio-shadow-network:
+    driver: bridge
+  traefik_public:
+    external: true
+
+volumes:
+  postgres-data:
+  shadow-postgres-data:
