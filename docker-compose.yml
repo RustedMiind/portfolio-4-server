@@ -7,6 +7,9 @@ services:
     container_name: portfolio-backend
     restart: unless-stopped
     env_file: [.env]
+    environment:
+      DATABASE_URL: postgresql://postgres:test1234%40@db:5432/portfolio
+      SHADOW_DATABASE_URL: postgresql://postgres:test1234%40@shadow-db:5432/shadow_portfolio
     ports:
       - 3101:3101
     networks:
