@@ -1,8 +1,11 @@
 # Use the official Node.js image as the base image
-FROM node:24-alpine
+FROM node:20-alpine
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
+
+# Prisma's query engine needs OpenSSL, which isn't included in node:20-alpine by default
+RUN apk add --no-cache openssl
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
