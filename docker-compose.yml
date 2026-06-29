@@ -44,6 +44,18 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: portfolio-pgadmin
+    restart: unless-stopped
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ali@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: Test1234@
+    depends_on:
+      - postgres
+
   shadow-db:
     image: postgres:17-alpine
     container_name: shadow_portfolio
