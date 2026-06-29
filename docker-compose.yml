@@ -11,6 +11,8 @@ services:
       SHADOW_DATABASE_URL: postgresql://postgres:test1234%40@shadow-db:5432/shadow_portfolio
     ports:
       - 3101:3101
+    volumes:
+      - uploads-data:/usr/src/app/uploads
     networks:
       - portfolio-backend-network
       - portfolio-shadow-network
@@ -80,3 +82,4 @@ networks:
 volumes:
   portfolio-postgres-data:
   shadow-portfolio-postgres-data:
+  uploads-data:
