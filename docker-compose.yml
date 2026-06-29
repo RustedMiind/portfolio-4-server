@@ -41,7 +41,7 @@ services:
     networks:
       - portfolio-backend-network
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - portfolio-postgres-data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
@@ -67,7 +67,7 @@ services:
     networks:
       - portfolio-shadow-network
     volumes:
-      - shadow-postgres-data:/var/lib/postgresql/data
+      - shadow-portfolio-postgres-data:/var/lib/postgresql/data
 
 networks:
   portfolio-backend-network:
@@ -78,5 +78,5 @@ networks:
     external: true
 
 volumes:
-  postgres-data:
-  shadow-postgres-data:
+  portfolio-postgres-data:
+  shadow-portfolio-postgres-data:
