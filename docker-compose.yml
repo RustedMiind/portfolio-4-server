@@ -54,7 +54,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ali@gmail.com
       PGADMIN_DEFAULT_PASSWORD: Test1234@
     depends_on:
-      - postgres
+      - portfolio-db
 
   shadow-db:
     image: postgres:17-alpine
